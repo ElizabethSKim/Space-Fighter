@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/assets">
+        <file>assets/bar.txt</file>
+        <file alias="kitten">assets/kitten.png</file>
+    </qresource>
+</RCC>
