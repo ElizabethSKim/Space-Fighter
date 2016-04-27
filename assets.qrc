@@ -2,5 +2,7 @@
     <qresource prefix="/assets">
         <file>assets/bar.txt</file>
         <file alias="kitten">assets/kitten.png</file>
+        <file alias="ship">assets/ship.png</file>
+        <file alias="flame">assets/flame.png</file>
     </qresource>
 </RCC>

@@ -1,7 +1,20 @@
 
 #include "sceneobject.h"
-#include "scenegraph.h"
+#include "engine.h"
 
+
+int SceneObject::total_live_scene_objects;
+
+SceneObject::SceneObject()
+{
+    scale = QVector3D(1,1,1);
+    rotation = 0;
+    total_live_scene_objects++;
+}
+SceneObject::~SceneObject()
+{
+    total_live_scene_objects--;
+}
 
 void SceneObject::tick(float ticktime)
 {
@@ -12,13 +25,13 @@ void SceneObject::tick(float ticktime)
     velocity += delta_velocity;
 
     //Angular
-    rotacceleration.normalize();
+   /* rotacceleration.normalize();
     QQuaternion delta_rotvelocity = rotacceleration*ticktime;
     QQuaternion delta_rotation = rotvelocity*ticktime;
     rotation += delta_rotation;
     rotation.normalize();
     rotvelocity += delta_rotvelocity;
-    rotvelocity.normalize();
+    rotvelocity.normalize();*/
 
     //Bind this object to the OpenGL context, and also call the init function
     if (!is_initialized)
@@ -30,6 +43,9 @@ void SceneObject::tick(float ticktime)
 
     pushmatrix();
     automatrix();
+    //Cache our matrix
+    matrix = getmatrix();
+
     //Also tick sub nodes
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
         (*p)->tick(ticktime);
@@ -40,13 +56,13 @@ void SceneObject::tick(float ticktime)
     //First we need to get our own intrinsic aabbox and convert
     //it to screen coordinates
     QRect rv = get_intrinsic_aabbox();
-    bool set = rv.width() != 0 && rv.height() != 0;
+    bool set = !rv.isNull();
     if (set)
     {
         QPoint tl = rv.topLeft();
-        QVector3D real_tl = getmatrix() * QVector3D(tl);
+        QVector4D real_tl = getmatrix() * QVector4D(tl.x(),tl.y(),0,1);
         QPoint br = rv.bottomRight();
-        QVector3D real_br = getmatrix() * QVector3D(br);
+        QVector4D real_br = getmatrix() * QVector4D(br.x(),br.y(),0,1);
         float left = floor(min(real_tl.x(), real_br.x()));
         float right = ceil(max(real_tl.x(), real_br.x()));
         float top = floor(min(real_tl.y(), real_br.y()));
@@ -55,7 +71,7 @@ void SceneObject::tick(float ticktime)
     }
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
         QRect cbb = (*p)->aabbox;
-        if (cbb.height() != 0 && cbb.width() != 0)
+        if (!cbb.isNull())
         {
             //Valid bounding box:
             if (!set) {
@@ -86,13 +102,18 @@ void SceneObject::render(float ticktime)
     pushmatrix();
     automatrix();
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
-        if ((*p)->visible && (*p)->on_screen()) {
+        if (!(*p)->invisible && (*p)->on_screen()) {
             (*p)->render(ticktime);
         }
     }
     popmatrix();
 }
-void SceneObject::set_engine(SceneGraph *engine)
+void SceneObject::configure()
+{
+
+}
+
+void SceneObject::set_engine(Engine *engine)
 {
     this->engine = engine;
 }
@@ -101,9 +122,9 @@ void SceneObject::matrix_rotate(QQuaternion &q)
 {
     engine->stack.top().rotate(q);
 }
-void SceneObject::matrix_rotate(float radians)
+void SceneObject::matrix_rotate(float degrees)
 {
-    engine->stack.top().rotate(radians, 0, 0, -1);
+    engine->stack.top().rotate(degrees, 0, 0, 1);
 }
 void SceneObject::matrix_translate(QVector3D &v)
 {
@@ -131,9 +152,9 @@ QMatrix4x4 SceneObject::getmatrix()
 }
 void SceneObject::automatrix()
 {
-    matrix_scale(scale);
-    matrix_rotate(rotation);
     matrix_translate(location);
+    matrix_rotate(rotation);
+    matrix_scale(scale);
 }
 float SceneObject::min(float a, float b)
 {
@@ -149,7 +170,6 @@ float SceneObject::clamp(float value, float floor, float ceil)
 }
 void SceneObject::initialize()
 {
-    //No default behavior, children will get initialized when we tick them
 }
 void SceneObject::postprocess(float ticktime)
 {
@@ -158,7 +178,7 @@ void SceneObject::postprocess(float ticktime)
     pushmatrix();
     automatrix();
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
-        if ((*p)->visible && (*p)->on_screen()) {
+        if (!(*p)->invisible && (*p)->on_screen()) {
             (*p)->postprocess(ticktime);
         }
     }
@@ -167,7 +187,7 @@ void SceneObject::postprocess(float ticktime)
 QRect SceneObject::get_intrinsic_aabbox()
 {
     //We assume we have no intrinsic aabox
-    return QRect(0,0,0,0);
+    return QRect();
 }
 bool SceneObject::on_screen()
 {

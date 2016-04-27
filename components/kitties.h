@@ -1,8 +1,7 @@
 #ifndef KITTIES_H
 #define KITTIES_H
 
-#include <QObject>
-#inclue <QOpenGLTexture>
+#include "sfcomponent.h"
 
 class Kitties : public SceneObject
 {

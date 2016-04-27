@@ -1,8 +1,7 @@
 #ifndef STARFIGHTER_H
 #define STARFIGHTER_H
 
-#include <QObject>
-#include <sceneobject.h>
+#include "sfcomponent.h"
 
 namespace sf
 {
@@ -14,6 +13,7 @@ namespace sf
         // Override
         virtual void initialize();
         virtual void tick(float ticktime);
+        virtual void render(float ticktime);
     };
 }
 #endif // STARFIGHTER_H

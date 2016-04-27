@@ -10,7 +10,7 @@
 #include <QRect>
 #include <QtGui/QOpenGLFunctions>
 
-class SceneGraph;
+class Engine;
 class SceneObject;
 
 typedef QSharedPointer<SceneObject> object_ptr;
@@ -21,12 +21,21 @@ class SceneObject : public QObject, protected QOpenGLFunctions
 
 public:
 
+    SceneObject();
+    ~SceneObject();
+
     // OVERRIDABLE FUNCTIONS
     // When you are adding new objects to the game, these are the functions
     // that you need to implement
 
-    // This is called once when the object is added to the scene graph.
+    // This is called once when the object is added to the scene graph. It is called on the next
+    // tick.
     virtual void initialize();
+
+    // This function is called by engine::spawn with whatever parameters are passed
+    // to spawn. You should use this for expensive stuff like compiling shaders
+    // or loading textures. Look at sf::Sprite as an example
+    void configure( /* whatever parameters you want */ );
 
     // This is called before every frame is rendered, and can be used for
     // adding game logic. The default implementation ticks child_nodes
@@ -60,12 +69,12 @@ public:
         if (rv == 0) {
             T example;
             QObject *qo = (QObject*) &example;
-            qFatal("A SceneObject of type %s was badly casted with ::as<%s>", this->metaObject()->className(), qo->metaObject()->className())
+            qFatal("A SceneObject of type %s was badly casted with ::as<%s>", this->metaObject()->className(), qo->metaObject()->className());
         }
         return QSharedPointer<T>(rv);
     }
     // Returns true if this object is a subclass of the given class
-    bool is (QString klass)
+    bool is (const char* klass)
     {
         return this->inherits(klass);
     }
@@ -74,7 +83,7 @@ public:
     bool on_screen();
 
     // You will not need to use this
-    void set_engine(SceneGraph *engine);
+    void set_engine(Engine *engine);
 protected:
     // Push a copy of the current matrix to the stack
     void pushmatrix();
@@ -110,7 +119,7 @@ protected:
     QMatrix4x4 getmatrix();
 
     // A pointer to the global engine, set when the object is added to the engine
-    SceneGraph *engine;
+    Engine *engine;
 
     // Used to ensure initialized() is only called once
     bool is_initialized;
@@ -123,13 +132,19 @@ public:
     QVector3D location;
     QVector3D velocity;
     QVector3D acceleration;
-    QQuaternion rotation;
-    QQuaternion rotvelocity;
-    QQuaternion rotacceleration;
+    double rotation;
+    double rotvelocity;
+    double rotacceleration;
     QVector3D scale;
 
-    // If false, the object and it's children should not be rendered
-    bool visible;
+    // If true, the object and it's children should not be rendered
+    bool invisible;
+
+    // If true, the object is collidable and will have collided() signalled
+    // on it (assuming that none of it's parents in the scene graph are also
+    // collidable, as the collided signal is sent to the first
+    // collidable object in a heirarchy
+    bool collidable;
 
     //These are the SceneObjects below this one in the scene graph
     QList<object_ptr> child_nodes;
@@ -137,6 +152,12 @@ public:
     // This is set by tick() after it calculates the bbox, so is faster
     // to use
     QRect aabbox;
+
+    // This is set by tick() and contains the object's full matrix
+    QMatrix4x4 matrix;
+
+    // This will not need to be used, it is simply for performance debugging
+    static int total_live_scene_objects;
 
 signals:
     // This is called whenever this object collides with another object.
