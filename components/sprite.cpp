@@ -80,7 +80,6 @@ void Sprite::render(float ticktime)
     shader_program->release();
     popmatrix();
 
-//    qDebug("rendering sprite");
     //Execute default render as well
     SceneObject::render(ticktime);
 }

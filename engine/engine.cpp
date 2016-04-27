@@ -68,11 +68,11 @@ void Engine::initGamePad()
         emit rightJoyChanged(QVector2D(x,y));
     });
     connect(gamepad, &QGamepad::buttonAChanged, this, &Engine::butA);
-    connect(gamepad, &QGamepad::buttonBChanged, this, &Engine::butA);
-    connect(gamepad, &QGamepad::buttonXChanged, this, &Engine::butA);
-    connect(gamepad, &QGamepad::buttonYChanged, this, &Engine::butA);
-    connect(gamepad, &QGamepad::buttonL1Changed, this, &Engine::butA);
-    connect(gamepad, &QGamepad::buttonR1Changed, this, &Engine::butA);
+    connect(gamepad, &QGamepad::buttonBChanged, this, &Engine::butB);
+    connect(gamepad, &QGamepad::buttonXChanged, this, &Engine::butX);
+    connect(gamepad, &QGamepad::buttonYChanged, this, &Engine::butY);
+    connect(gamepad, &QGamepad::buttonL1Changed, this, &Engine::leftBumper);
+    connect(gamepad, &QGamepad::buttonR1Changed, this, &Engine::rightBumper);
     connect(gamepad, &QGamepad::buttonLeftChanged, this, &Engine::dpadL);
     connect(gamepad, &QGamepad::buttonRightChanged, this, &Engine::dpadR);
     connect(gamepad, &QGamepad::buttonUpChanged, this, &Engine::dpadU);

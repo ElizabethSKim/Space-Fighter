@@ -31,20 +31,30 @@ void Ship::configure()
     child_nodes.prepend(flame);
     flame->location = QVector3D(0,25,-1);
     flame->rotation = 180;
+
+/*
+    connect(engine, &Engine::butX, this, [this](bool b) {
+
+        qDebug() << "removing flame (maybe)";
+
+        if (child_nodes.length() == 2)
+            child_nodes.removeFirst();
+
+        flame.reset();
+    });
+    */
 }
 
-void Ship::render(float ticktime)
-{
-    SceneObject::render(ticktime);
-}
 
 void Ship::tick(float ticktime)
 {
-    //We adjust the size of our flame based on our throttle
-    flame->scale = QVector3D(0.15*throttle,0.2*throttle,1);
-    //Need to adjust location a little bit so that the flame looks like
-    //it comes from the base
-    flame->location = QVector3D(0,25 - 6*(1-throttle),-1);
+    if(flame){
+        //We adjust the size of our flame based on our throttle
+        flame->scale = QVector3D(0.15*throttle,0.2*throttle,1);
+        //Need to adjust location a little bit so that the flame looks like
+        //it comes from the base
+        flame->location = QVector3D(0,25 - 6*(1-throttle),-1);
+    }
 
     // Calculate acceleration
     double inputToAccelerationFactor = 300;
@@ -92,6 +102,7 @@ void Ship::tick(float ticktime)
         }
         delta = clamp(delta, -maxDegreesChange, maxDegreesChange);
         rotation = curangle+delta*ticktime*steeringStrength;
+       // rotation = joyangle;
     }
 
 }

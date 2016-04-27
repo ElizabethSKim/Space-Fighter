@@ -12,7 +12,6 @@ namespace sf
 
     public:
         Ship();
-        void render(float ticktime);
         void configure();
         void tick(float ticktime);
     private:
