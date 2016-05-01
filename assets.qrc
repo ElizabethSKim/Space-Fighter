@@ -4,5 +4,27 @@
         <file alias="kitten">assets/kitten.png</file>
         <file alias="ship">assets/ship.png</file>
         <file alias="flame">assets/flame.png</file>
+        <file alias="asteroid/star">assets/asteroid/star.png</file>
+        <file alias="asteroid/explosion6">assets/asteroid/explosion6.png</file>
+        <file alias="asteroid/explosion5">assets/asteroid/explosion5.png</file>
+        <file alias="asteroid/explosion4">assets/asteroid/explosion4.png</file>
+        <file alias="asteroid/explosion3">assets/asteroid/explosion3.png</file>
+        <file alias="asteroid/explosion2">assets/asteroid/explosion2.png</file>
+        <file alias="asteroid/explosion1">assets/asteroid/explosion1.png</file>
+        <file alias="asteroid/asteroid4">assets/asteroid/asteroid4.png</file>
+        <file alias="asteroid/asteroid3">assets/asteroid/asteroid3.png</file>
+        <file alias="asteroid/asteroid2">assets/asteroid/asteroid2.png</file>
+        <file alias="asteroid/asteroid1">assets/asteroid/asteroid1.png</file>
+        <file alias="lazer/lazer1">assets/lazer/lazerSprite1.png</file>
+        <file alias="lazer/lazer2">assets/lazer/lazerSprite2.png</file>
+        <file alias="lazer/lazer3">assets/lazer/lazerSprite3.png</file>
+        <file alias="lazer/lazer4">assets/lazer/lazerSprite4.png</file>
+        <file alias="lazer/lazer5">assets/lazer/lazerSprite5.png</file>
+        <file alias="lazer/lazer6">assets/lazer/lazerSprite6.png</file>
+        <file alias="ui/background">assets/ui/bgnd.png</file>
+        <file alias="ui/gameover">assets/ui/gameover.png</file>
+        <file alias="ui/howtoplay">assets/ui/howtoplay.png</file>
+        <file alias="ui/start">assets/ui/start.png</file>
+        <file alias="ui/heart">assets/ui/heart.png</file>
     </qresource>
 </RCC>

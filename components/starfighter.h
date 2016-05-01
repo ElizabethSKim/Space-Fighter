@@ -14,6 +14,9 @@ namespace sf
         virtual void initialize();
         virtual void tick(float ticktime);
         virtual void render(float ticktime);
+        object_ptr weapon;
+        object_ptr ship;
+
     };
 }
 #endif // STARFIGHTER_H

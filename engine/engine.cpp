@@ -86,7 +86,7 @@ void Engine::initGamePad()
 void Engine::collateCollidables(object_ptr o, QList<object_ptr> &list)
 {
     //Create a list of all collidable objects
-    if (o->collidable)
+    if (o->collidable && !o->invisible)
         list.append(o);
 
     else
@@ -102,6 +102,8 @@ void Engine::checkCollisions(QList<object_ptr> &list)
         {
             object_ptr lhs = list[i];
             object_ptr rhs = list[j];
+            qDebug() << "col" << i << j;
+            qDebug() << " aabbs" << lhs->aabbox << "  " << rhs->aabbox;
             if (lhs->aabbox.intersects(rhs->aabbox))
             {
                 //TODO perform "expensive" but accurate per-pixel collision test
@@ -135,6 +137,7 @@ void Engine::render()
     //Now we check for collision
     QList<object_ptr> collidables;
     collateCollidables(root_obj, collidables);
+    qDebug() << "we have " << collidables.length() << " active collidable objects";
     checkCollisions(collidables);
 
     //Then we render the first pass,

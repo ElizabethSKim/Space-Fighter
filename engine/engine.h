@@ -42,6 +42,7 @@ public:
     QStack<QMatrix4x4> stack;
     object_ptr root_obj;
     QGamepad *gamepad;
+    QElapsedTimer gametime;
 
 public slots:
     void renderLater();
@@ -79,7 +80,6 @@ private:
     bool m_update_pending;
     bool m_animating;
 
-    QElapsedTimer gametime;
     qint64 last_tick;
     QOpenGLContext *m_context;
     QOpenGLPaintDevice *m_device;

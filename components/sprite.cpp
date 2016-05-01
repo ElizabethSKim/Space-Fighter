@@ -9,25 +9,27 @@ static float coords[12] = {
     50,-50,0,
     50,50,0
 };
-static float uvs[12] = {
-    0,1,0,
-    0,0,0,
-    1,1,0,
-    1,0,0
+static float uvs[8] = {
+    0,1,
+    0,0,
+    1,1,
+    1,0,
 };
 static const char *vertex_shader =
-    "attribute highp vec4 vertex_position;                      \n"
-    "attribute highp vec4 vertex_uv_coordinate;                 \n"
+    "attribute highp vec3 vertex_position;                      \n"
+    "attribute highp vec2 vertex_uv_coordinate;                 \n"
     "uniform highp mat4 matrix;                                 \n"
-    "varying highp vec4 frag_uv_coordinate;                     \n"
+    "varying highp vec2 frag_uv_coordinate;                     \n"
     "                                                           \n"
     "void main() {                                              \n"
     "   frag_uv_coordinate = vertex_uv_coordinate;              \n"
-    "   gl_Position = matrix * vertex_position;                 \n"
+    "   vec4 real_vertex = vec4(0,0,0,1);                       \n"
+    "   real_vertex.xyz = vertex_position;                      \n"
+    "   gl_Position = matrix * real_vertex;                     \n"
     "}                                                          \n";
 
 static const char *fragment_shader =
-    "varying highp vec4 frag_uv_coordinate;                     \n"
+    "varying highp vec2 frag_uv_coordinate;                     \n"
     "uniform sampler2D texture;                                 \n"
     "void main() {                                              \n"
     "   vec4 texel = texture2D(texture, frag_uv_coordinate);    \n"
@@ -51,15 +53,18 @@ void Sprite::configure(QString asset)
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
 }
 
-QRect Sprite::get_intrinsic_aabbox()
+QRectF Sprite::get_intrinsic_aabbox()
 {
-    return QRect(-50,-50,100,100);
+    return QRectF(-50,-50,100,100);
 }
 
 void Sprite::render(float ticktime)
 {
     pushmatrix();
     automatrix();
+
+    auto nloc = getmatrix() * location;
+    qDebug() << "NLOC IS" << nloc;
     //Enable the shader for this object
     shader_program->bind();
     //Set the current matrix
@@ -70,7 +75,7 @@ void Sprite::render(float ticktime)
     glVertexAttribPointer(shader_vertex_position, 3, GL_FLOAT, GL_FALSE,0,coords);
     glEnableVertexAttribArray(shader_vertex_position);
     //Bind the vertex uv coordinate attributes
-    glVertexAttribPointer(shader_vertex_uv_coordinate, 3, GL_FLOAT, GL_FALSE,0,uvs);
+    glVertexAttribPointer(shader_vertex_uv_coordinate, 2, GL_FLOAT, GL_FALSE,0,uvs);
     glEnableVertexAttribArray(shader_vertex_uv_coordinate);
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 

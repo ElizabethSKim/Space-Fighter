@@ -57,7 +57,7 @@ public:
     // the default is nothing (width/height zero). The returned value should be in
     // the object's coordinate space. It is up to the caller to multiply it by
     // the matrix
-    virtual QRect get_intrinsic_aabbox();
+    virtual QRectF get_intrinsic_aabbox();
 
     // UTILITY FUNCTIONS
     // These are available for use in the object's implementation
@@ -151,7 +151,7 @@ public:
 
     // This is set by tick() after it calculates the bbox, so is faster
     // to use
-    QRect aabbox;
+    QRectF aabbox;
 
     // This is set by tick() and contains the object's full matrix
     QMatrix4x4 matrix;

@@ -14,6 +14,7 @@ namespace sf
         Ship();
         void configure();
         void tick(float ticktime);
+        void delay();
     private:
         QVector2D steeringVector;
         double throttle;

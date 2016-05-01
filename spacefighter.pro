@@ -7,9 +7,12 @@ SOURCES += engine/main.cpp \
     engine/sceneobject.cpp \
     components/sprite.cpp \
     components/starfighter.cpp \
-    components/kitties.cpp \
     components/ship.cpp \
-    engine/engine.cpp
+    engine/engine.cpp \
+    components/health.cpp \
+    components/asteroid.cpp \
+    components/weapon.cpp \
+    components/ui.cpp
 
 INCLUDEPATH += engine
 
@@ -19,9 +22,12 @@ HEADERS += \
     engine/sceneobject.h \
     components/sprite.h \
     components/starfighter.h \
-    components/kitties.h \
     components/ship.h \
     engine/engine.h \
-    components/sfcomponent.h
+    components/sfcomponent.h \
+    components/health.h \
+    components/asteroid.h \
+    components/weapon.h \
+    components/ui.h
 
 DISTFILES +=

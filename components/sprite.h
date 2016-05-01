@@ -15,7 +15,7 @@ namespace sf
         void configure(QString asset);
 
         void render(float ticktime);
-        QRect get_intrinsic_aabbox();
+        QRectF get_intrinsic_aabbox();
 
     private:
         QOpenGLTexture *texture;

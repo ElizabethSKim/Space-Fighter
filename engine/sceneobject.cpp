@@ -8,6 +8,7 @@ int SceneObject::total_live_scene_objects;
 SceneObject::SceneObject()
 {
     scale = QVector3D(1,1,1);
+    collidable = false;
     rotation = 0;
     total_live_scene_objects++;
 }
@@ -55,22 +56,24 @@ void SceneObject::tick(float ticktime)
     //Now that all sub nodes are ticked, lets update our bbox
     //First we need to get our own intrinsic aabbox and convert
     //it to screen coordinates
-    QRect rv = get_intrinsic_aabbox();
+    QRectF rv = get_intrinsic_aabbox();
+    qDebug() << "our intrinsic bb is " << rv;
     bool set = !rv.isNull();
     if (set)
     {
-        QPoint tl = rv.topLeft();
-        QVector4D real_tl = getmatrix() * QVector4D(tl.x(),tl.y(),0,1);
-        QPoint br = rv.bottomRight();
-        QVector4D real_br = getmatrix() * QVector4D(br.x(),br.y(),0,1);
-        float left = floor(min(real_tl.x(), real_br.x()));
-        float right = ceil(max(real_tl.x(), real_br.x()));
-        float top = floor(min(real_tl.y(), real_br.y()));
-        float bottom = ceil(max(real_tl.y(), real_br.y()));
-        rv = QRect(QPoint(left,top), QPoint(right, bottom));
+        QPointF tl = rv.topLeft();
+        QVector4D real_tl = matrix * QVector4D(tl.x(),tl.y(),0,1);
+        QPointF br = rv.bottomRight();
+        QVector4D real_br = matrix * QVector4D(br.x(),br.y(),0,1);
+        float left = min(real_tl.x(), real_br.x());
+        float right = max(real_tl.x(), real_br.x());
+        float top = min(real_tl.y(), real_br.y());
+        float bottom = max(real_tl.y(), real_br.y());
+        rv = QRectF(QPointF(left,top), QPointF(right, bottom));
+        qDebug() << "after matrix mul aabb is" << rv;
     }
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
-        QRect cbb = (*p)->aabbox;
+        QRectF cbb = (*p)->aabbox;
         if (!cbb.isNull())
         {
             //Valid bounding box:
@@ -78,10 +81,12 @@ void SceneObject::tick(float ticktime)
                 rv = cbb;
                 set = true;
             } else {
+                qDebug() << "uniting our bb from " << rv << " to " << rv.united(cbb) << " with cbb" << cbb;
                 rv = rv.united(cbb);
             }
         }
     }
+    qDebug() << "after merging etc aabb is " << rv;
     aabbox = rv;
 
     //Now lets check if we have entered or left the screen
@@ -184,12 +189,12 @@ void SceneObject::postprocess(float ticktime)
     }
     popmatrix();
 }
-QRect SceneObject::get_intrinsic_aabbox()
+QRectF SceneObject::get_intrinsic_aabbox()
 {
     //We assume we have no intrinsic aabox
-    return QRect();
+    return QRectF();
 }
 bool SceneObject::on_screen()
 {
-    return aabbox.intersects(QRect(0,0,SCENE_WIDTH, SCENE_HEIGHT));
+    return aabbox.intersects(QRectF(-1,-1,2,2));
 }

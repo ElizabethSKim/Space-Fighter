@@ -1,6 +1,6 @@
 #include "ship.h"
-
 #include <components/sprite.h>
+#include <QThread>
 
 using sf::Ship;
 
@@ -10,6 +10,7 @@ Ship::Ship()
 
 void Ship::configure()
 {
+    collidable = true;
     // Add some logic that runs when the left trigger changes position
     connect(engine, &Engine::leftTrigChanged, this, [this](double v)
     {
@@ -25,14 +26,15 @@ void Ship::configure()
     //Also attach our asset
     auto sprite = engine->spawn<sf::Sprite>(":assets/ship");
     child_nodes.append(sprite);
-    sprite->scale = QVector3D(0.5,0.5,1);
+    sprite->scale = QVector3D(1,1,1);
 
+    //Engine flame
     flame = engine->spawn<sf::Sprite>(":assets/flame");
     child_nodes.prepend(flame);
-    flame->location = QVector3D(0,25,-1);
+    //flame->location = QVector3D(0,300,1);
     flame->rotation = 180;
 
-/*
+    /*
     connect(engine, &Engine::butX, this, [this](bool b) {
 
         qDebug() << "removing flame (maybe)";
@@ -45,7 +47,6 @@ void Ship::configure()
     */
 }
 
-
 void Ship::tick(float ticktime)
 {
     if(flame){
@@ -53,7 +54,7 @@ void Ship::tick(float ticktime)
         flame->scale = QVector3D(0.15*throttle,0.2*throttle,1);
         //Need to adjust location a little bit so that the flame looks like
         //it comes from the base
-        flame->location = QVector3D(0,25 - 6*(1-throttle),-1);
+        flame->location = QVector3D(0,100 - 6*(1-throttle),-1);
     }
 
     // Calculate acceleration
@@ -104,5 +105,6 @@ void Ship::tick(float ticktime)
         rotation = curangle+delta*ticktime*steeringStrength;
        // rotation = joyangle;
     }
+
 
 }
