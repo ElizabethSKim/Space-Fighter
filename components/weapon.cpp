@@ -2,6 +2,7 @@
 #include <components/sprite.h>
 #include <QElapsedTimer>
 
+
 using sf::Weapon;
 
 
@@ -9,6 +10,15 @@ Weapon::Weapon()
 {
     isFiring = false;
 }
+
+PreloadAsset Weapon::preload([](Engine* engine){
+    engine->spawn<sf::Sprite>(":assets/lazer/lazer1");
+    engine->spawn<sf::Sprite>(":assets/lazer/lazer2");
+    engine->spawn<sf::Sprite>(":assets/lazer/lazer3");
+    engine->spawn<sf::Sprite>(":assets/lazer/lazer4");
+    engine->spawn<sf::Sprite>(":assets/lazer/lazer5");
+    engine->spawn<sf::Sprite>(":assets/lazer/lazer6");
+});
 
 void Weapon::configure()
 {

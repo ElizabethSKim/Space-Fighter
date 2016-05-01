@@ -57,7 +57,6 @@ void SceneObject::tick(float ticktime)
     //First we need to get our own intrinsic aabbox and convert
     //it to screen coordinates
     QRectF rv = get_intrinsic_aabbox();
-    qDebug() << "our intrinsic bb is " << rv;
     bool set = !rv.isNull();
     if (set)
     {
@@ -70,7 +69,6 @@ void SceneObject::tick(float ticktime)
         float top = min(real_tl.y(), real_br.y());
         float bottom = max(real_tl.y(), real_br.y());
         rv = QRectF(QPointF(left,top), QPointF(right, bottom));
-        qDebug() << "after matrix mul aabb is" << rv;
     }
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
         QRectF cbb = (*p)->aabbox;
@@ -81,12 +79,10 @@ void SceneObject::tick(float ticktime)
                 rv = cbb;
                 set = true;
             } else {
-                qDebug() << "uniting our bb from " << rv << " to " << rv.united(cbb) << " with cbb" << cbb;
                 rv = rv.united(cbb);
             }
         }
     }
-    qDebug() << "after merging etc aabb is " << rv;
     aabbox = rv;
 
     //Now lets check if we have entered or left the screen

@@ -24,6 +24,7 @@ void Asteroid::configure()
     //Decrement healthPoints if ship collided with asteroid
     connect(this, &SceneObject::collided, this, [this](object_ptr other, bool dominant)
     {
+
         if (other->is("ship"))
         {
             qDebug() <<"Collided asteroid + ship";

@@ -44,6 +44,10 @@ public:
     QGamepad *gamepad;
     QElapsedTimer gametime;
 
+    void runLoadFunctions();
+
+    static void onLoad(std::function<void(Engine*)> cb);
+
 public slots:
     void renderLater();
     void renderNow();
@@ -65,6 +69,7 @@ signals:
     void rightBumper(bool down);
     void startPressed();
     void backPressed();
+
 protected:
     void initGamePad();
     void render();
@@ -75,7 +80,6 @@ protected:
     void exposeEvent(QExposeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-
 
     bool m_update_pending;
     bool m_animating;

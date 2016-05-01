@@ -1,5 +1,7 @@
 #include "sprite.h"
 #include <QVector3D>
+#include <QHash>
+#include "preloadasset.h"
 
 using sf::Sprite;
 
@@ -36,21 +38,38 @@ static const char *fragment_shader =
     "   gl_FragColor = texel;                                   \n"
     "}                                                          \n";
 
+
+
+
+
+// Allocate static storage
+int Sprite::shader_vertex_position;
+int Sprite::shader_vertex_uv_coordinate;
+QOpenGLShaderProgram *Sprite::shader_program;
+QHash<QString, QOpenGLTexture*> Sprite::loaded;
+
 void Sprite::configure(QString asset)
 {
-    auto image = QImage(asset);
-    if (image.isNull()) {
-        qFatal("asset %s failed to load", asset.toStdString().c_str());
+    if (shader_program == 0) {
+        shader_program = new QOpenGLShaderProgram(NULL);
+        shader_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertex_shader);
+        shader_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragment_shader);
+        shader_program->link();
+        shader_vertex_position = shader_program->attributeLocation("vertex_position");
+        shader_vertex_uv_coordinate = shader_program->attributeLocation("vertex_uv_coordinate");
     }
-    texture = new QOpenGLTexture(image.mirrored());
-    shader_program = new QOpenGLShaderProgram(this);
-    shader_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertex_shader);
-    shader_program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragment_shader);
-    shader_program->link();
-    shader_vertex_position = shader_program->attributeLocation("vertex_position");
-    shader_vertex_uv_coordinate = shader_program->attributeLocation("vertex_uv_coordinate");
-    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    if (loaded.contains(asset)) {
+        texture = loaded[asset];
+    } else {
+        auto image = QImage(asset);
+        if (image.isNull()) {
+            qFatal("asset %s failed to load", asset.toStdString().c_str());
+        }
+        texture = new QOpenGLTexture(image.mirrored());
+        texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+        texture->setMagnificationFilter(QOpenGLTexture::Linear);
+        loaded[asset] = texture;
+    }
 }
 
 QRectF Sprite::get_intrinsic_aabbox()
@@ -63,8 +82,6 @@ void Sprite::render(float ticktime)
     pushmatrix();
     automatrix();
 
-    auto nloc = getmatrix() * location;
-    qDebug() << "NLOC IS" << nloc;
     //Enable the shader for this object
     shader_program->bind();
     //Set the current matrix

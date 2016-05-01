@@ -11,7 +11,7 @@ using namespace sf;
 //FIXME Pressing start spawns 2 ships :O
 
 void StarFighter::initialize()
-{
+{    
     //starts with start page invisible = false
     auto ui = engine->spawn<sf::UI>();
     child_nodes.prepend(ui);

@@ -12,7 +12,8 @@ SOURCES += engine/main.cpp \
     components/health.cpp \
     components/asteroid.cpp \
     components/weapon.cpp \
-    components/ui.cpp
+    components/ui.cpp \
+    components/preloadasset.cpp
 
 INCLUDEPATH += engine
 
@@ -28,6 +29,7 @@ HEADERS += \
     components/health.h \
     components/asteroid.h \
     components/weapon.h \
-    components/ui.h
+    components/ui.h \
+    components/preloadasset.h
 
 DISTFILES +=

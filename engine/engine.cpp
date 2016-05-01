@@ -45,6 +45,22 @@ Engine::~Engine()
     delete m_device;
 }
 
+static QList<std::function<void(Engine*)>> &slist() {
+    static QList<std::function<void(Engine*)>> lst;
+    return lst;
+}
+
+void Engine::onLoad(std::function<void(Engine*)> cb) {
+    slist().append(cb);
+}
+
+void Engine::runLoadFunctions() {
+    for (int i = 0; i < slist().length();i++) {
+        slist()[i](this);
+        qDebug() << "loaded" << i << "out of" << slist().length();
+    }
+}
+
 void Engine::initGamePad()
 {
     connect(gamepad, &QGamepad::axisLeftXChanged, this, [this](double value){
@@ -102,8 +118,8 @@ void Engine::checkCollisions(QList<object_ptr> &list)
         {
             object_ptr lhs = list[i];
             object_ptr rhs = list[j];
-            qDebug() << "col" << i << j;
-            qDebug() << " aabbs" << lhs->aabbox << "  " << rhs->aabbox;
+           // qDebug() << "col" << i << j;
+           // qDebug() << " aabbs" << lhs->aabbox << "  " << rhs->aabbox;
             if (lhs->aabbox.intersects(rhs->aabbox))
             {
                 //TODO perform "expensive" but accurate per-pixel collision test
@@ -117,8 +133,10 @@ void Engine::checkCollisions(QList<object_ptr> &list)
 void Engine::render()
 {
     //Init OpenGL
-    if (!m_device)
+    if (!m_device) {
         m_device = new QOpenGLPaintDevice;
+        runLoadFunctions();
+    }
 
     //Work out our tick time
     qint64 now = gametime.elapsed();
@@ -137,7 +155,7 @@ void Engine::render()
     //Now we check for collision
     QList<object_ptr> collidables;
     collateCollidables(root_obj, collidables);
-    qDebug() << "we have " << collidables.length() << " active collidable objects";
+ //   qDebug() << "we have " << collidables.length() << " active collidable objects";
     checkCollisions(collidables);
 
     //Then we render the first pass,

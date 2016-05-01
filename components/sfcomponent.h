@@ -7,5 +7,6 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 #include <QQuaternion>
+#include "preloadasset.h"
 
 #endif // SFCOMPONENT_H
