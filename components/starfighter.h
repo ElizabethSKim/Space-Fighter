@@ -11,8 +11,7 @@ namespace sf
 
     public:
         // Override
-        ~StarFighter();
-        void test();
+
         virtual void initialize();
         virtual void tick(float ticktime);
         virtual void render(float ticktime);

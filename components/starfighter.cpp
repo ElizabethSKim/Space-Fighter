@@ -10,15 +10,8 @@ using namespace sf;
 
 //FIXME Pressing start spawns 2 ships :O
 
-void StarFighter::test() {
-    qDebug() << "test OK";
-}
-StarFighter::~StarFighter() {
-    qFatal("why the fuck are you deconstructing mee??");
-}
-
 void StarFighter::initialize()
-{
+{    
     //starts with start page invisible = false
     auto ui = engine->spawn<sf::UI>();
     child_nodes.prepend(ui);
@@ -52,11 +45,18 @@ void StarFighter::initialize()
 void StarFighter::tick(float ticktime)
 {
    SceneObject::tick(ticktime);
+
    if (weapon)
    {
        weapon->location = ship->location;
        weapon->rotation = ship->rotation + 270;
     }
+
+//   if (object_cast<sf::Health>(health)->healthPoints < 0)
+//   {
+//        //call gameover function
+//   }
+
 }
 
 void StarFighter::render(float ticktime)

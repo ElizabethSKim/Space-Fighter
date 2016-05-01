@@ -11,7 +11,7 @@
 #include <QElapsedTimer>
 #include <QTimer>
 #include <QGamepad>
-
+#include <functional>
 #include "sceneobject.h"
 class QPainter;
 class QOpenGLContext;
@@ -45,6 +45,10 @@ public:
     QGamepad *gamepad;
     QElapsedTimer gametime;
 
+    void runLoadFunctions();
+
+    static void onLoad(std::function<void(Engine*)> cb);
+
 public slots:
     void renderLater();
     void renderNow();
@@ -64,8 +68,10 @@ signals:
     void butY(bool down);
     void leftBumper(bool down);
     void rightBumper(bool down);
+
     void startPressed(bool down);
     void backPressed(bool down);
+
 protected:
     void initGamePad();
     void render();
@@ -76,7 +82,6 @@ protected:
     void exposeEvent(QExposeEvent *event) Q_DECL_OVERRIDE;
 
 private:
-
 
     bool m_update_pending;
     bool m_animating;

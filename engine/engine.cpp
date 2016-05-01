@@ -14,12 +14,13 @@ Engine::Engine(QWindow *parent)
     , m_context(0)
     , m_device(0)
     , frames(0)
+    , last_tick(0)
 {
     setSurfaceType(QWindow::OpenGLSurface);
     QSurfaceFormat format;
     format.setSamples(16);
     setFormat(format);
-
+    gametime.start();
     fpstimer.setInterval(1000);
     connect(&fpstimer, &QTimer::timeout, [this]{
         qDebug("FPS: %d , live objects %d",this->frames, SceneObject::total_live_scene_objects);
@@ -44,6 +45,22 @@ Engine::Engine(QWindow *parent)
 Engine::~Engine()
 {
     delete m_device;
+}
+
+static QList<std::function<void(Engine*)>> &slist() {
+    static QList<std::function<void(Engine*)>> lst;
+    return lst;
+}
+
+void Engine::onLoad(std::function<void(Engine*)> cb) {
+    slist().append(cb);
+}
+
+void Engine::runLoadFunctions() {
+    for (int i = 0; i < slist().length();i++) {
+        slist()[i](this);
+        qDebug() << "loaded" << i << "out of" << slist().length();
+    }
 }
 
 void Engine::initGamePad()
@@ -103,8 +120,6 @@ void Engine::checkCollisions(QList<object_ptr> &list)
         {
             object_ptr lhs = list[i];
             object_ptr rhs = list[j];
-            //qDebug() << "col" << i << j;
-            //qqDebug() << " aabbs" << lhs->aabbox << "  " << rhs->aabbox;
             if (lhs->aabbox.intersects(rhs->aabbox))
             {
                 //TODO perform "expensive" but accurate per-pixel collision test
@@ -118,10 +133,16 @@ void Engine::checkCollisions(QList<object_ptr> &list)
 void Engine::render()
 {
     //Init OpenGL
-    if (!m_device)
+    if (!m_device) {
         m_device = new QOpenGLPaintDevice;
+        runLoadFunctions();
+    }
+
     //Work out our tick time
     qint64 now = gametime.elapsed();
+    if (last_tick == 0) {
+        last_tick = now;
+    }
     float ticktime = (float)((now - last_tick) / 1000.0);
     last_tick = now;
 
@@ -137,7 +158,7 @@ void Engine::render()
     //Now we check for collision
     QList<object_ptr> collidables;
     collateCollidables(root_obj, collidables);
-    //qDebug() << "we have " << collidables.length() << " active collidable objects";
+
     checkCollisions(collidables);
 
     //Then we render the first pass,

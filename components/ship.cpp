@@ -18,7 +18,7 @@ void Ship::configure()
     });
 
     // Also the right joy is our intended rotation
-    connect(engine, &Engine::rightJoyChanged, this, [this](QVector2D v)
+    connect(engine, &Engine::leftJoyChanged, this, [this](QVector2D v)
     {
        steeringVector = v;
     });
@@ -50,10 +50,10 @@ void Ship::tick(float ticktime)
 {
     if(flame){
         //We adjust the size of our flame based on our throttle
-        flame->scale = QVector3D(0.35*throttle,0.32*throttle,1);
+        flame->scale = QVector3D(0.30*throttle,0.30*throttle,1);
         //Need to adjust location a little bit so that the flame looks like
         //it comes from the base
-        flame->location = QVector3D(0,50 - 10*(1-throttle),-1);
+        flame->location = QVector3D(0,45 - 10*(1-throttle),-1);
     }
 
     // Calculate acceleration

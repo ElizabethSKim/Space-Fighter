@@ -18,21 +18,10 @@ int main(int argc, char *argv[])
     engine.resize(SCENE_WIDTH,SCENE_HEIGHT);
     auto gamelogic = engine.spawn<sf::StarFighter>();
     engine.root_obj = gamelogic;
-    qDebug("a");
-    object_cast<sf::StarFighter>(gamelogic)->test();
-    //gamelogic->as<sf::StarFighter>();//->test();
-    qDebug("b");
-    object_cast<sf::StarFighter>(gamelogic)->test();
-    //gamelogic->as<sf::StarFighter>();//->test();
-    qDebug("c");
-    object_cast<sf::StarFighter>(gamelogic)->test();
-    //gamelogic->as<sf::StarFighter>();
-    qDebug("d");
+    //object_cast<sf::StarFighter>(gamelogic)->test();
     engine.show();
- //   gamelogic->as<sf::StarFighter>()->test();
-  //gamelogic->as<sf::StarFighter>()->test();
-    //engine.showFullScreen();
 
+    //engine.showFullScreen();
     engine.start();
 
     return app.exec();

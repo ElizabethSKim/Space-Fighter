@@ -19,6 +19,7 @@ namespace sf
         bool isFiring;
     private:
         object_ptr lazer[6];
+        static PreloadAsset preload;
 
     };
 }

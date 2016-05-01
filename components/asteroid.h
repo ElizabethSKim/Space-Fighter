@@ -16,9 +16,11 @@ namespace sf
     private:
         int maxAsteroids;
         int renderedAsteroids;
-        object_ptr asteroid;
         object_ptr health;
-
+       // object_ptr asteroid;
+        object_ptr explosion[6];
+        void setAsteroids();
+        static PreloadAsset preload;
     };
 }
 #endif // ASTEROID_H
