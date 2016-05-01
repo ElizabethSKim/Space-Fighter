@@ -10,7 +10,9 @@ Health::Health()
 
 void Health::configure()
 {
-    setHearts();
+
+        setHearts();
+
 }
 
 void Health::setHearts()
@@ -18,10 +20,12 @@ void Health::setHearts()
     child_nodes.clear();
     for (int i = 0; i < healthPoints; i ++)
     {
-        auto heart = engine->spawn<sf::Sprite>(":assets/ui/heart");
+        qDebug() << "got here";
+        heart = engine->spawn<sf::Sprite>(":assets/ui/heart");
         child_nodes.append(heart);
         heart->scale = QVector3D(0.5,0.5,1);
         heart->location = QVector3D(i*75, 10, 0);
+
     }
 }
 

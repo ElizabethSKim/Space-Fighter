@@ -10,11 +10,17 @@ SceneObject::SceneObject()
     scale = QVector3D(1,1,1);
     collidable = false;
     rotation = 0;
+    is_initialized = false;
+    aabbox = QRectF();
+    on_screen_last_frame = false;
     total_live_scene_objects++;
 }
 SceneObject::~SceneObject()
 {
     total_live_scene_objects--;
+}
+void SceneObject::test2() {
+    qDebug() << "SdfsFD";
 }
 
 void SceneObject::tick(float ticktime)
@@ -57,7 +63,7 @@ void SceneObject::tick(float ticktime)
     //First we need to get our own intrinsic aabbox and convert
     //it to screen coordinates
     QRectF rv = get_intrinsic_aabbox();
-    qDebug() << "our intrinsic bb is " << rv;
+    //qDebug() << "our intrinsic bb is " << rv;
     bool set = !rv.isNull();
     if (set)
     {
@@ -70,7 +76,7 @@ void SceneObject::tick(float ticktime)
         float top = min(real_tl.y(), real_br.y());
         float bottom = max(real_tl.y(), real_br.y());
         rv = QRectF(QPointF(left,top), QPointF(right, bottom));
-        qDebug() << "after matrix mul aabb is" << rv;
+        //qDebug() << "after matrix mul aabb is" << rv;
     }
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
         QRectF cbb = (*p)->aabbox;
@@ -81,12 +87,12 @@ void SceneObject::tick(float ticktime)
                 rv = cbb;
                 set = true;
             } else {
-                qDebug() << "uniting our bb from " << rv << " to " << rv.united(cbb) << " with cbb" << cbb;
+                //qDebug() << "uniting our bb from " << rv << " to " << rv.united(cbb) << " with cbb" << cbb;
                 rv = rv.united(cbb);
             }
         }
     }
-    qDebug() << "after merging etc aabb is " << rv;
+    //qDebug() << "after merging etc aabb is " << rv;
     aabbox = rv;
 
     //Now lets check if we have entered or left the screen
@@ -167,7 +173,7 @@ float SceneObject::min(float a, float b)
 }
 float SceneObject::max(float a, float b)
 {
-    return a>b?a:b;
+    return (a>b)?a:b;
 }
 float SceneObject::clamp(float value, float floor, float ceil)
 {
@@ -196,5 +202,7 @@ QRectF SceneObject::get_intrinsic_aabbox()
 }
 bool SceneObject::on_screen()
 {
+    if (aabbox.isNull())
+        return false;
     return aabbox.intersects(QRectF(-1,-1,2,2));
 }

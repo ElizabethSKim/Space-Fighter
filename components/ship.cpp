@@ -31,7 +31,6 @@ void Ship::configure()
     //Engine flame
     flame = engine->spawn<sf::Sprite>(":assets/flame");
     child_nodes.prepend(flame);
-    //flame->location = QVector3D(0,300,1);
     flame->rotation = 180;
 
     /*
@@ -51,10 +50,10 @@ void Ship::tick(float ticktime)
 {
     if(flame){
         //We adjust the size of our flame based on our throttle
-        flame->scale = QVector3D(0.15*throttle,0.2*throttle,1);
+        flame->scale = QVector3D(0.35*throttle,0.32*throttle,1);
         //Need to adjust location a little bit so that the flame looks like
         //it comes from the base
-        flame->location = QVector3D(0,100 - 6*(1-throttle),-1);
+        flame->location = QVector3D(0,50 - 10*(1-throttle),-1);
     }
 
     // Calculate acceleration

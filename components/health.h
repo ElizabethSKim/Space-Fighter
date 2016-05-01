@@ -16,6 +16,7 @@ namespace sf
         void tick(float ticktime);
         double healthPoints;
         void setHearts();
+        object_ptr heart;
     private:
 
     };

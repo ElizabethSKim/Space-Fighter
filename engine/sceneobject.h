@@ -15,6 +15,11 @@ class SceneObject;
 
 typedef QSharedPointer<SceneObject> object_ptr;
 
+template <typename T> QSharedPointer<T> object_cast(object_ptr o)
+{
+    return o.dynamicCast<T>();
+}
+
 class SceneObject : public QObject, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -24,6 +29,7 @@ public:
     SceneObject();
     ~SceneObject();
 
+    void test2();
     // OVERRIDABLE FUNCTIONS
     // When you are adding new objects to the game, these are the functions
     // that you need to implement
@@ -63,16 +69,13 @@ public:
     // These are available for use in the object's implementation
 public:
     // Convert this generic SceneObject to a specific object type
-    template <typename T> QSharedPointer<T> as()
+
+    template <typename T> bool foo()
     {
-        T *rv = qobject_cast<T*>(this);
-        if (rv == 0) {
-            T example;
-            QObject *qo = (QObject*) &example;
-            qFatal("A SceneObject of type %s was badly casted with ::as<%s>", this->metaObject()->className(), qo->metaObject()->className());
-        }
-        return QSharedPointer<T>(rv);
+        qDebug() << "I don't do anything...";
+        return true;
     }
+
     // Returns true if this object is a subclass of the given class
     bool is (const char* klass)
     {

@@ -2,7 +2,7 @@
 #include <components/sprite.h>
 #include "health.h"
 #include "sceneobject.h"
-
+#include <components/starfighter.h>
 using sf::Asteroid;
 
 Asteroid::Asteroid()
@@ -22,17 +22,24 @@ void Asteroid::configure()
     asteroid->invisible = false;
 
     //Decrement healthPoints if ship collided with asteroid
-    connect(this, &SceneObject::collided, this, [this](object_ptr other, bool dominant)
+    //connect(this, &SceneObject::collided, this, [this](object_ptr other, bool dominant)
+    connect(engine, &Engine::butY, this, [this](bool b)
     {
-        if (other->is("ship"))
+        if (b)
+        //if (other->is("ship"))
         {
-            qDebug() <<"Collided asteroid + ship";
-            //other->as<sf::Ship>()->
-            //<sf::Health>()->healthPoints -= 1;
-            //<sf::Health>()->setHearts();
+            auto health = object_cast<sf::StarFighter>(engine->root_obj)->health;
+            if (health)
+            {
+                qDebug() <<"Collided asteroid + ship";
+                object_cast<sf::Health>(health)->healthPoints -= 1;
+                object_cast<sf::Health>(health)->setHearts();
+                //engine->root_obj->as<sf::StarFighter>()->health->as<sf::Health>()->setHearts();
+            }
         }
+
     });
-        /*
+     /*
     connect(engine, &SceneObject::left_screen, this, [this]()
     {
         child_nodes.removeLast();

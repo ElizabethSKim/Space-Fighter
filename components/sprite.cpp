@@ -64,7 +64,7 @@ void Sprite::render(float ticktime)
     automatrix();
 
     auto nloc = getmatrix() * location;
-    qDebug() << "NLOC IS" << nloc;
+    //qDebug() << "NLOC IS" << nloc;
     //Enable the shader for this object
     shader_program->bind();
     //Set the current matrix

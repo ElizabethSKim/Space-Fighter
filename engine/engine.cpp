@@ -13,6 +13,7 @@ Engine::Engine(QWindow *parent)
     , m_animating(false)
     , m_context(0)
     , m_device(0)
+    , frames(0)
 {
     setSurfaceType(QWindow::OpenGLSurface);
     QSurfaceFormat format;
@@ -102,8 +103,8 @@ void Engine::checkCollisions(QList<object_ptr> &list)
         {
             object_ptr lhs = list[i];
             object_ptr rhs = list[j];
-            qDebug() << "col" << i << j;
-            qDebug() << " aabbs" << lhs->aabbox << "  " << rhs->aabbox;
+            //qDebug() << "col" << i << j;
+            //qqDebug() << " aabbs" << lhs->aabbox << "  " << rhs->aabbox;
             if (lhs->aabbox.intersects(rhs->aabbox))
             {
                 //TODO perform "expensive" but accurate per-pixel collision test
@@ -119,7 +120,6 @@ void Engine::render()
     //Init OpenGL
     if (!m_device)
         m_device = new QOpenGLPaintDevice;
-
     //Work out our tick time
     qint64 now = gametime.elapsed();
     float ticktime = (float)((now - last_tick) / 1000.0);
@@ -137,7 +137,7 @@ void Engine::render()
     //Now we check for collision
     QList<object_ptr> collidables;
     collateCollidables(root_obj, collidables);
-    qDebug() << "we have " << collidables.length() << " active collidable objects";
+    //qDebug() << "we have " << collidables.length() << " active collidable objects";
     checkCollisions(collidables);
 
     //Then we render the first pass,
@@ -159,7 +159,6 @@ void Engine::render()
     //TODO postprocess shader rendering
 
     frames++;
-
 }
 
 void Engine::renderLater()

@@ -34,6 +34,7 @@ public:
         T *raw = new T();
         raw->set_engine(this);
         raw->configure(args...);
+        qDebug() << "spawned object at " << (void*)raw;
         return object_ptr(raw);
     }
 
@@ -63,8 +64,8 @@ signals:
     void butY(bool down);
     void leftBumper(bool down);
     void rightBumper(bool down);
-    void startPressed();
-    void backPressed();
+    void startPressed(bool down);
+    void backPressed(bool down);
 protected:
     void initGamePad();
     void render();
