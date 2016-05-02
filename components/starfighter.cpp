@@ -33,11 +33,6 @@ void StarFighter::initialize()
             health = engine->spawn<sf::Health>();
             child_nodes.append(health);
             health->location = QVector3D(50, 50, 0);
-
-            asteroids = engine->spawn<sf::Asteroid>();
-            child_nodes.append(asteroids);
-            asteroids->location = QVector3D(500, 500, 0);
-
         }
     });
 }
@@ -51,6 +46,37 @@ void StarFighter::tick(float ticktime)
        weapon->location = ship->location;
        weapon->rotation = ship->rotation + 270;
     }
+
+    if (engine->gametime.elapsed() % 63 == 0)
+    {
+        auto asteroid = engine->spawn<sf::Asteroid>();
+        child_nodes.append(asteroid);
+        int xAxis = qrand() % 1900;
+        asteroid->location = QVector3D(xAxis, 0, 0);
+        asteroid->velocity = QVector3D(qrand() % 100, qrand() % 100 ,0);
+    }
+
+    if (engine->gametime.elapsed() % 128 == 0)
+    {
+        auto asteroid = engine->spawn<sf::Asteroid>();
+        child_nodes.append(asteroid);
+        int xAxis = qrand() % 1900;
+        asteroid->location = QVector3D(xAxis, 1200, 0);
+        asteroid->velocity = QVector3D(qrand() % 100,-qrand() % 100 ,0);
+    }
+    if (engine->gametime.elapsed() % 42 == 0)
+    {
+        auto asteroid = engine->spawn<sf::Asteroid>();
+        child_nodes.append(asteroid);
+        int yAxis = qrand() % 1200;
+        asteroid->location = QVector3D(1900, yAxis,0);
+        asteroid->velocity = QVector3D(-qrand() % 100,qrand() % 100 ,0);
+    }
+    if (engine->gametime.elapsed() % 2 == 0)
+    {
+
+    }
+
 
 //   if (object_cast<sf::Health>(health)->healthPoints < 0)
 //   {

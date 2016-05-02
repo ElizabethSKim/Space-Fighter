@@ -9,6 +9,7 @@ using sf::Weapon;
 Weapon::Weapon()
 {
     isFiring = false;
+    collidable = true;
 }
 
 PreloadAsset Weapon::preload([](Engine* engine){

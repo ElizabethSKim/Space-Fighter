@@ -3,7 +3,7 @@
 
 #include "sfcomponent.h"
 #include <components/sprite.h>
-
+#include <QElapsedTimer>
 namespace sf
 {
     class Asteroid : public SceneObject
@@ -14,13 +14,14 @@ namespace sf
         void configure();
         void tick(float ticktime);
     private:
-        int maxAsteroids;
-        int renderedAsteroids;
-        object_ptr health;
-       // object_ptr asteroid;
+        QElapsedTimer invincibleTime;
+        QElapsedTimer explosionTime;
+        bool isHit;
+        bool isExploding;
         object_ptr explosion[6];
-        void setAsteroids();
         static PreloadAsset preload;
+
+
     };
 }
 #endif // ASTEROID_H

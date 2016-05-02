@@ -18,7 +18,7 @@ namespace sf
         object_ptr weapon;
         object_ptr ship;
         object_ptr health;
-        object_ptr asteroids;
+//        object_ptr asteroid;
 
     };
 }
