@@ -85,10 +85,11 @@ private:
 
     bool m_update_pending;
     bool m_animating;
-
-    qint64 last_tick;
     QOpenGLContext *m_context;
     QOpenGLPaintDevice *m_device;
+    qint64 last_tick;
+
+
     QTimer fpstimer;
     int frames;
 

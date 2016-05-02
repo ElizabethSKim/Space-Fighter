@@ -2,6 +2,7 @@
 #include "sceneobject.h"
 #include "engine.h"
 
+#include "components/sprite.h"
 
 int SceneObject::total_live_scene_objects;
 
@@ -21,6 +22,21 @@ SceneObject::~SceneObject()
 }
 void SceneObject::test2() {
     qDebug() << "SdfsFD";
+}
+
+QList<QSharedPointer<sf::Sprite>> SceneObject::get_collidable_sprites()
+{
+    QList<QSharedPointer<sf::Sprite>> rv;
+    foreach(auto ch, child_nodes)
+    {
+        if (!ch->invisible)
+        {
+            if (ch->is("sf::Sprite"))
+                rv.append(object_cast<sf::Sprite>(ch));
+            rv.append(ch->get_collidable_sprites());
+        }
+    }
+    return rv;
 }
 
 void SceneObject::tick(float ticktime)
@@ -66,14 +82,23 @@ void SceneObject::tick(float ticktime)
     bool set = !rv.isNull();
     if (set)
     {
-        QPointF tl = rv.topLeft();
-        QVector4D real_tl = matrix * QVector4D(tl.x(),tl.y(),0,1);
-        QPointF br = rv.bottomRight();
-        QVector4D real_br = matrix * QVector4D(br.x(),br.y(),0,1);
-        float left = min(real_tl.x(), real_br.x());
-        float right = max(real_tl.x(), real_br.x());
-        float top = min(real_tl.y(), real_br.y());
-        float bottom = max(real_tl.y(), real_br.y());
+        QList<QVector3D> verts;
+        verts.append(matrix*QVector3D(rv.topLeft()));
+        verts.append(matrix*QVector3D(rv.topRight()));
+        verts.append(matrix*QVector3D(rv.bottomLeft()));
+        verts.append(matrix*QVector3D(rv.bottomRight()));
+        double left = verts[0].x();
+        double right = verts[0].x();
+        double top = verts[0].y();
+        double bottom = verts[0].y();
+        foreach(auto v, verts)
+        {
+            if (v.x() < left) left = v.x();
+            if (v.x() > right) right = v.x();
+            if (v.y() > top) top = v.y();
+            if (v.y() < bottom) bottom = v.y();
+
+        }
         rv = QRectF(QPointF(left,top), QPointF(right, bottom));
     }
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {

@@ -13,6 +13,11 @@
 class Engine;
 class SceneObject;
 
+namespace sf
+{
+    class Sprite;
+}
+
 typedef QSharedPointer<SceneObject> object_ptr;
 
 template <typename T> QSharedPointer<T> object_cast(object_ptr o)
@@ -64,6 +69,8 @@ public:
     // the object's coordinate space. It is up to the caller to multiply it by
     // the matrix
     virtual QRectF get_intrinsic_aabbox();
+
+    virtual QList<QSharedPointer<sf::Sprite>> get_collidable_sprites();
 
     // UTILITY FUNCTIONS
     // These are available for use in the object's implementation
@@ -167,7 +174,7 @@ signals:
     // The pair of objects will both have collided() emitted, but one will
     // be flagged dominant and one not, this allows you to prevent having
     // duplicate handling of collisions.
-    void collided(object_ptr other, bool dominant);
+    void collided(object_ptr you, object_ptr other, bool dominant);
 
     // Signalled when the object's bounding box has entered the screen.
     // See also on_screen()

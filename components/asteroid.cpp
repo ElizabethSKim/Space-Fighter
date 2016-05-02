@@ -27,7 +27,7 @@ PreloadAsset Asteroid::preload([](Engine* engine){
 void Asteroid::configure()
 {
     collidable = true;
-    maxAsteroids = 6;
+    maxAsteroids = 1;
     renderedAsteroids = 0;
 
     setAsteroids();
@@ -85,7 +85,7 @@ void Asteroid::setAsteroids()
 
             //asteroid->location = QVector3D((fmod((double)rand(),10.0))/10.0 * 1900, 1200,0);
             asteroid->location = QVector3D(500, 200, 0);
-            asteroid->velocity = QVector3D(20,0, 0);//-100,0);
+          //  asteroid->velocity = QVector3D(20,0, 0);//-100,0);
             renderedAsteroids += 1;
         }
     }
@@ -94,7 +94,4 @@ void Asteroid::setAsteroids()
 void Asteroid::tick(float ticktime)
 {
     SceneObject::tick(ticktime);
-    qDebug() << "ticktimE: " << ticktime;
-
-
 }
