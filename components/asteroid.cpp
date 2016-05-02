@@ -28,7 +28,9 @@ PreloadAsset Asteroid::preload([](Engine* engine){
 
 void Asteroid::configure()
 {
+
     auto asteroid = engine->spawn<sf::Sprite>(":assets/asteroid/asteroid1");
+
 
     explosion[0] = engine->spawn<sf::Sprite>(":assets/asteroid/explosion1");
     explosion[1] = engine->spawn<sf::Sprite>(":assets/asteroid/explosion2");
@@ -103,10 +105,11 @@ void Asteroid::tick(float ticktime)
             }
         } else
         {
+
             isHit = false;
+
         }
     }
-
 
     if (isExploding)
     {

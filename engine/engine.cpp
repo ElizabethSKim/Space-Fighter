@@ -7,14 +7,17 @@
 #include <QtGui/QPainter>
 #include <QtGamepad/QGamepad>
 
+#include <components/sprite.h>
+
 Engine::Engine(QWindow *parent)
     : QWindow(parent)
     , m_update_pending(false)
     , m_animating(false)
     , m_context(0)
     , m_device(0)
-    , frames(0)
     , last_tick(0)
+    , frames(0)
+
 {
     setSurfaceType(QWindow::OpenGLSurface);
     QSurfaceFormat format;
@@ -122,9 +125,19 @@ void Engine::checkCollisions(QList<object_ptr> &list)
             object_ptr rhs = list[j];
             if (lhs->aabbox.intersects(rhs->aabbox))
             {
-                //TODO perform "expensive" but accurate per-pixel collision test
-                emit lhs->collided(rhs, true);
-                emit rhs->collided(lhs, false);
+                auto lhs_sprites = lhs->get_collidable_sprites();
+                auto rhs_sprites = rhs->get_collidable_sprites();
+                foreach(auto lhs_sprite, lhs_sprites)
+                {
+                    foreach(auto rhs_sprite, rhs_sprites)
+                    {
+                        if(lhs_sprite->hitpoly_intersects(rhs_sprite))
+                        {
+                            emit lhs->collided(lhs, rhs, true);
+                            emit rhs->collided(rhs, lhs, false);
+                        }
+                    }
+                }
             }
         }
     }
@@ -158,7 +171,6 @@ void Engine::render()
     //Now we check for collision
     QList<object_ptr> collidables;
     collateCollidables(root_obj, collidables);
-
     checkCollisions(collidables);
 
     //Then we render the first pass,
