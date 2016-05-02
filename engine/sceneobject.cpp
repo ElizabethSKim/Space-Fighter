@@ -77,6 +77,8 @@ void SceneObject::tick(float ticktime)
         rv = QRectF(QPointF(left,top), QPointF(right, bottom));
     }
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
+        if ((*p)->invisible)
+            continue;
         QRectF cbb = (*p)->aabbox;
         if (!cbb.isNull())
         {
