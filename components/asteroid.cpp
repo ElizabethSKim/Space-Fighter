@@ -73,6 +73,7 @@ void Asteroid::configure()
             {
                 isExploding = true;
                 explosionTime.start();
+
             }
         }
     });
@@ -144,7 +145,6 @@ void Asteroid::tick(float ticktime)
         {
             explosion[5]->invisible = true;
             isExploding = false;
-            this->invisible = true;
         }
     }
 }

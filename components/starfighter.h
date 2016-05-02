@@ -18,8 +18,9 @@ namespace sf
         object_ptr weapon;
         object_ptr ship;
         object_ptr health;
-//        object_ptr asteroid;
-
+        bool spawnAsteroids;
+        int maxAsteroids;
+        int renderedAsteroids;
     };
 }
 #endif // STARFIGHTER_H

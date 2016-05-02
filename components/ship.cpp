@@ -105,5 +105,15 @@ void Ship::tick(float ticktime)
        // rotation = joyangle;
     }
 
+    if (location.x() <= 0 || location.x() >= 1900)
+    {
+        velocity = QVector3D(-velocity.x(), velocity.y(), velocity.z());
+    }
+    if (location.y() <= 0 || location.y() >= 1100)
+    {
+        velocity = QVector3D(velocity.x(), -velocity.y(), velocity.z());
+    }
+
+
 
 }
