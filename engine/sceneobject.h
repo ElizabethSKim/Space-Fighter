@@ -92,6 +92,8 @@ public:
     // Returns true if the object's axis-aligned bounding box intersects the viewport
     bool on_screen();
 
+    void remove_child_later(object_ptr o);
+
     // You will not need to use this
     void set_engine(Engine *engine);
 protected:
@@ -136,6 +138,8 @@ protected:
 
     // Used by the default tick() to signal enter_screen() and left_screen()
     bool on_screen_last_frame;
+
+    QList<object_ptr> deferred_deletes;
 
 public:
     // The object's physical properties

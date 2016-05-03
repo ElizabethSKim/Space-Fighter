@@ -4,7 +4,7 @@
 #include "sfcomponent.h"
 
 //Set this to true to draw bounding box and hitpoly by default
-#define DEFAULT_DRAW_HITPOLY true
+#define DEFAULT_DRAW_HITPOLY false
 
 namespace sf
 {

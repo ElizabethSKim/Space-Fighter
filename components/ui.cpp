@@ -9,6 +9,7 @@ UI::UI()
 
 void UI::configure()
 {
+    //TODO preload stuff
     start = engine->spawn<sf::Sprite>(":assets/ui/start");
     start->invisible = false;
     child_nodes.append(start);

@@ -21,6 +21,9 @@ namespace sf
         bool spawnAsteroids;
         int maxAsteroids;
         int renderedAsteroids;
+        int score;
+
+        void spawnPickup(QVector3D loc);
     };
 }
 #endif // STARFIGHTER_H

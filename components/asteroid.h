@@ -19,7 +19,10 @@ namespace sf
         bool isHit;
         bool isExploding;
         object_ptr explosion[6];
+        object_ptr asteroid;
         static PreloadAsset preload;
+        object_ptr deleteMe;
+        bool canDelete;
 
 
     };

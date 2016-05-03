@@ -5,6 +5,7 @@
 #include <components/asteroid.h>
 #include <components/weapon.h>
 #include <components/ui.h>
+#include <components/pickup.h>
 
 using namespace sf;
 
@@ -13,18 +14,20 @@ using namespace sf;
 void StarFighter::initialize()
 {    
     //starts with start page invisible = false
-//    auto ui = engine->spawn<sf::UI>();
-//    child_nodes.prepend(ui);
-//    ui->location = QVector3D(960,540,0);
-//    ui->scale = QVector3D(19.3,10.7,1);
+    auto ui = engine->spawn<sf::UI>();
+    child_nodes.prepend(ui);
+    ui->location = QVector3D(960,540,0);
+    ui->scale = QVector3D(19.3,10.7,1);
 
     spawnAsteroids = false;
-    maxAsteroids = 10;
     renderedAsteroids = 0;
-//    connect(engine, &Engine::startPressed, this, [this](bool b)
-//    {
-//        if (b)
-//        {
+    maxAsteroids = 10;
+    score = 0;
+
+    connect(engine, &Engine::startPressed, this, [this](bool b)
+    {
+        if (b)
+        {
             ship = engine->spawn<sf::Ship>();
             child_nodes.append(ship);
             ship->location = QVector3D(800,200,0);
@@ -38,8 +41,16 @@ void StarFighter::initialize()
             health->location = QVector3D(50, 50, 0);
 
             spawnAsteroids = true;
-//        }
-//    });
+        }
+    });
+}
+
+void StarFighter::spawnPickup(QVector3D loc)
+{
+    //TODO
+    auto star = engine->spawn<sf::Pickup>();
+    child_nodes.append(star);
+    star->location = loc;
 }
 
 void StarFighter::tick(float ticktime)
@@ -55,44 +66,42 @@ void StarFighter::tick(float ticktime)
 
     if (spawnAsteroids)
     {
-        if (renderedAsteroids < spawnAsteroids)
-        {
-            if (engine->gametime.elapsed() % 63 == 0)
+            if (qrand() % 180 == 0)
             {
                 auto asteroid = engine->spawn<sf::Asteroid>();
                 child_nodes.append(asteroid);
-                int xAxis = qrand() % 1900;
+                int xAxis = qrand() % 1500;
+                //TODO Have 4 cases
+                //TODO if has entered is true and then isLeft -> remove asteroid
                 asteroid->location = QVector3D(xAxis, 0, 0);
                 asteroid->velocity = QVector3D(qrand() % 100, qrand() % 100 ,0);
                 renderedAsteroids += 1;
             }
 
-            if (engine->gametime.elapsed() % 128 == 0)
-            {
-                auto asteroid = engine->spawn<sf::Asteroid>();
-                child_nodes.append(asteroid);
-                int xAxis = qrand() % 1900;
-                asteroid->location = QVector3D(xAxis, 1200, 0);
-                asteroid->velocity = QVector3D(qrand() % 100,-qrand() % 100 ,0);
-                renderedAsteroids += 1;
-            }
-            if (engine->gametime.elapsed() % 42 == 0)
-            {
-                auto asteroid = engine->spawn<sf::Asteroid>();
-                child_nodes.append(asteroid);
-                int yAxis = qrand() % 1200;
-                asteroid->location = QVector3D(1900, yAxis,0);
-                asteroid->velocity = QVector3D(-qrand() % 100,qrand() % 100 ,0);
-                renderedAsteroids += 1;
-            }
-//        if (engine->gametime.elapsed() % 2 == 0)
-//        {
 
+//            if (engine->gametime.elapsed() % 128 == 0)
+//            {
+//                auto asteroid = engine->spawn<sf::Asteroid>();
+//                child_nodes.append(asteroid);
+//                int xAxis = qrand() % 1900;
+//                asteroid->location = QVector3D(xAxis, 1200, 0);
+//                asteroid->velocity = QVector3D(qrand() % 100,-qrand() % 100 ,0);
+//                renderedAsteroids += 1;
+//            }
+//            if (engine->gametime.elapsed() % 42 = 0)
+//            {
+//                auto asteroid = engine->spawn<sf::Asteroid>();
+//                child_nodes.append(asteroid);
+//                int yAxis = qrand() % 1200;
+//                asteroid->location = QVector3D(1900, yAxis,0);
+//                asteroid->velocity = QVector3D(-qrand() % 100,qrand() % 100 ,0);
+//                renderedAsteroids += 1;
+//            }
 //        }
-        }
     }
 
 
+    //TODO
 //   if (object_cast<sf::Health>(health)->healthPoints < 0)
 //   {
 //        //call gameover function

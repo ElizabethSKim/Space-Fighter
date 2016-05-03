@@ -34,7 +34,7 @@ public:
         T *raw = new T();
         raw->set_engine(this);
         raw->configure(args...);
-        qDebug() << "spawned object at " << (void*)raw;
+        //qDebug() << "spawned object at " << (void*)raw;
         return object_ptr(raw);
     }
 

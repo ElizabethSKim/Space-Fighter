@@ -10,6 +10,7 @@ Asteroid::Asteroid()
     isExploding = false;
     isHit = false;
     collidable = true;
+    canDelete = false;
 }
 
 PreloadAsset Asteroid::preload([](Engine* engine){
@@ -29,7 +30,7 @@ PreloadAsset Asteroid::preload([](Engine* engine){
 void Asteroid::configure()
 {
 
-    auto asteroid = engine->spawn<sf::Sprite>(":assets/asteroid/asteroid1");
+    asteroid = engine->spawn<sf::Sprite>(":assets/asteroid/asteroid1");
 
 
     explosion[0] = engine->spawn<sf::Sprite>(":assets/asteroid/explosion1");
@@ -43,7 +44,7 @@ void Asteroid::configure()
     {
         explosion[i]->invisible = true;
         explosion[i]->location = QVector3D(0,0,0);
-        asteroid->child_nodes.append(explosion[i]);
+        child_nodes.append(explosion[i]);
     }
     child_nodes.append(asteroid);
     asteroid->scale = QVector3D(1,1,1);
@@ -55,7 +56,7 @@ void Asteroid::configure()
     //asteroid->location = QVector3D(500, 200, 0);
     //asteroid->velocity = QVector3D(0,0, 0);//-100,0);
 
-    connect(this, &SceneObject::collided, this, [this](object_ptr other, bool dominant)
+    connect(this, &SceneObject::collided, this, [this](object_ptr me, object_ptr other, bool dominant)
     {
         //Collide with ship
         if (other->is("sf::Ship"))
@@ -73,10 +74,28 @@ void Asteroid::configure()
         {
             if (!isExploding)
             {
+                asteroid->invisible = true;
                 isExploding = true;
                 explosionTime.start();
-
+                deleteMe = me;
             }
+        }
+
+        if (dominant && other->is("sf::Asteroid"))
+        {
+            /*
+            auto vel1dir = this->velocity;
+            vel1dir.normalize();
+            auto vel2dir = other->velocity;
+            vel2dir.normalize();
+            auto midaxis = (vel1dir + veld2dir)/2;
+            */
+            auto v = me->velocity;
+            me->velocity = other->velocity;
+            other->velocity = v;
+
+           // me->velocity = -velocity;
+//            other->velocity = -velocity;
         }
     });
 
@@ -95,7 +114,8 @@ void Asteroid::tick(float ticktime)
 
     if (isHit)
     {
-        if (invincibleTime.elapsed() < 3000)
+        //TODO
+        if (invincibleTime.elapsed() == 3000)
         {
             auto health = object_cast<sf::StarFighter>(engine->root_obj)->health;
             if (object_cast<sf::Health>(health)->healthPoints > 0)
@@ -105,9 +125,7 @@ void Asteroid::tick(float ticktime)
             }
         } else
         {
-
             isHit = false;
-
         }
     }
 
@@ -148,6 +166,17 @@ void Asteroid::tick(float ticktime)
         {
             explosion[5]->invisible = true;
             isExploding = false;
+            canDelete = true;
+
         }
+    }
+
+    if (deleteMe && canDelete)
+    {
+        auto ptr = object_cast<sf::StarFighter>(engine->root_obj);
+        ptr->remove_child_later(deleteMe);
+        object_cast<sf::StarFighter>(engine->root_obj)->renderedAsteroids -= 1;
+        object_cast<sf::StarFighter>(engine->root_obj)->spawnPickup(deleteMe->location);
+        deleteMe.clear();
     }
 }

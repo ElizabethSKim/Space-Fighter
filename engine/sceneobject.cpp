@@ -15,6 +15,7 @@ SceneObject::SceneObject()
     aabbox = QRectF();
     on_screen_last_frame = false;
     total_live_scene_objects++;
+    deferred_deletes = QList<object_ptr>();
 }
 SceneObject::~SceneObject()
 {
@@ -71,8 +72,16 @@ void SceneObject::tick(float ticktime)
 
     //Also tick sub nodes
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
-        (*p)->tick(ticktime);
+        if (!(*p).isNull())
+            (*p)->tick(ticktime);
     }
+
+    //And delete all that asked to be deleted
+    foreach (auto p, deferred_deletes)
+    {
+        child_nodes.removeOne(p);
+    }
+    deferred_deletes.clear();
     popmatrix();
 
     //Now that all sub nodes are ticked, lets update our bbox
@@ -129,6 +138,11 @@ void SceneObject::tick(float ticktime)
     }
     on_screen_last_frame = on_screen();
 }
+void SceneObject::remove_child_later(object_ptr o)
+{
+    deferred_deletes.append(o);
+}
+
 void SceneObject::render(float ticktime)
 {
     //Default simply sets matrix and processes sub objects, assuming they are visible

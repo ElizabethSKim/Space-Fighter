@@ -45,7 +45,7 @@ void Ship::configure()
     });
     */
 }
-
+//TODO preload
 void Ship::tick(float ticktime)
 {
     if(flame){
@@ -105,11 +105,11 @@ void Ship::tick(float ticktime)
        // rotation = joyangle;
     }
 
-    if (location.x() <= 0 || location.x() >= 1900)
+    if (location.x() <= 50 || location.x() >= 1850)
     {
         velocity = QVector3D(-velocity.x(), velocity.y(), velocity.z());
     }
-    if (location.y() <= 0 || location.y() >= 1100)
+    if (location.y() <= 50 || location.y() >= 1050)
     {
         velocity = QVector3D(velocity.x(), -velocity.y(), velocity.z());
     }
