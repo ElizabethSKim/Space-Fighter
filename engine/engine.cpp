@@ -201,7 +201,7 @@ void Engine::render()
     collateCollidables(root_obj, collidables);
     checkCollisions(collidables);
 
-    int w_width = width(); int w_height = height();
+    w_width = width(); w_height = height();
 
     GLuint framebuf, frametex;
     glGenFramebuffers(1, &framebuf);
@@ -282,6 +282,8 @@ void Engine::render()
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableVertexAttribArray(postprog_vp);
     postprog->release();
+
+    root_obj->postprocess(ticktime);
 
     GLuint tex [] = {frametex};
     glDeleteTextures(1, tex);

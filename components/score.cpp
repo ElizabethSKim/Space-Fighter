@@ -52,6 +52,7 @@ void Score::tick(float ticktime)
 {
     child_nodes.clear();
     int n = score;
+    if (n < 0) /*lolwut*/ n = 0;
     QVector<int> v = print_each_digit(n);
     int loc = 0;
     for(int i=v.size()-1; i>=0; i--){

@@ -87,7 +87,7 @@ private:
     bool m_animating;
     GLuint m_framebuf;
     GLuint m_framebuf_texture;
-
+    int w_width, w_height;
     QOpenGLShaderProgram *postprog;
     QOpenGLContext *m_context;
     QOpenGLPaintDevice *m_device;

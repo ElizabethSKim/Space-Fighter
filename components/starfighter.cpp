@@ -7,6 +7,8 @@
 #include <components/ui.h>
 #include <components/pickup.h>
 #include <components/score.h>
+#include <components/dabomb.h>
+
 using namespace sf;
 
 //FIXME Pressing start spawns 2 ships :O
@@ -23,6 +25,21 @@ void StarFighter::initialize()
     renderedAsteroids = 0;
     maxAsteroids = 10;
 
+    bomb = engine->spawn<sf::DaBomb>();
+    child_nodes.append(bomb);
+
+    connect(engine, &Engine::rightBumper, this, [this](bool b)
+    {
+       if (!b) return;
+       if (object_cast<sf::Score>(score)->score >= 10)
+       {
+           if (!object_cast<sf::DaBomb>(bomb)->started)
+           {
+                object_cast<sf::Score>(score)->score -= 10;
+                firebomb(ship->location);
+           }
+       }
+    });
 
     connect(engine, &Engine::startPressed, this, [this](bool b)
     {
@@ -56,6 +73,27 @@ void StarFighter::spawnPickup(QVector3D loc)
     child_nodes.append(star);
     star->location = loc;
     star->scale = QVector3D(0.5,0.5,0);
+}
+
+void StarFighter::firebomb(QVector3D loc)
+{
+    auto realbomb = object_cast<sf::DaBomb>(bomb);
+    bomb->location = loc;
+    if(!realbomb->started)
+    {
+        realbomb->start();
+    }
+    foreach(auto star, child_nodes)
+    {
+        if (star->is("sf::Pickup"))
+        {
+            star->velocity = (loc - star->location) * 0.25;
+        }
+        if (star->is("sf::Asteroid"))
+        {
+            object_cast<sf::Asteroid>(star)->die(star);
+        }
+    }
 }
 
 void StarFighter::tick(float ticktime)

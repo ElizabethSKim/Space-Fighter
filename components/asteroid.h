@@ -13,6 +13,7 @@ namespace sf
         Asteroid();
         void configure();
         void tick(float ticktime);
+        void die(object_ptr me);
     private:
         QElapsedTimer invincibleTime;
         QElapsedTimer explosionTime;

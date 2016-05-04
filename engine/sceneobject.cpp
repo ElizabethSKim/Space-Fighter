@@ -226,9 +226,9 @@ void SceneObject::postprocess(float ticktime)
     pushmatrix();
     automatrix();
     for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
-        if (!(*p)->invisible && (*p)->on_screen()) {
+      //  if (!(*p)->invisible && (*p)->on_screen()) {
             (*p)->postprocess(ticktime);
-        }
+        //}
     }
     popmatrix();
 }

@@ -15,7 +15,8 @@ SOURCES += engine/main.cpp \
     components/ui.cpp \
     components/preloadasset.cpp \
     components/pickup.cpp \
-    components/score.cpp
+    components/score.cpp \
+    components/dabomb.cpp
 
 INCLUDEPATH += engine
 
@@ -35,7 +36,8 @@ HEADERS += \
     components/ui.h \
     components/preloadasset.h \
     components/pickup.h \
-    components/score.h
+    components/score.h \
+    components/dabomb.h
 
 DISTFILES += \
     assets/ship.png \

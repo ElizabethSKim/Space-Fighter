@@ -92,13 +92,7 @@ void Asteroid::configure()
         //Collide with weapon
         if (other->is("sf::Weapon"))
         {
-            if (!isExploding)
-            {
-                asteroid->invisible = true;
-                isExploding = true;
-                explosionTime.start();
-                deleteMe = me;
-            }
+            die(me);
         }
 
         if (dominant && other->is("sf::Asteroid"))
@@ -121,6 +115,16 @@ void Asteroid::configure()
 //    });
 }
 
+void Asteroid::die(object_ptr me)
+{
+    if (!isExploding)
+    {
+        asteroid->invisible = true;
+        isExploding = true;
+        explosionTime.start();
+        deleteMe = me;
+    }
+}
 
 void Asteroid::tick(float ticktime)
 {
