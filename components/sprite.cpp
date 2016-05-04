@@ -83,6 +83,7 @@ void Sprite::configure(QString asset)
         texture = new QOpenGLTexture(image.mirrored());
         texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
         texture->setMagnificationFilter(QOpenGLTexture::Linear);
+        texture->setWrapMode(QOpenGLTexture::ClampToEdge);
         loaded[asset] = texture;
     }
     //TODO Calculate this correctly some time
