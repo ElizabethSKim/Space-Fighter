@@ -289,7 +289,7 @@ void Engine::render()
     glDeleteFramebuffers(1, fbz);
 
     frames++;
-    while((err = glGetError()) != GL_NO_ERROfR)
+    while((err = glGetError()) != GL_NO_ERROR)
     {
         qDebug() << "GL ERROR postpostprocess: " << err;
     }
