@@ -57,7 +57,7 @@ void UI::tick(float ticktime)
 //        gameover->invisible = false;
 //        object_cast<sf::StarFighter>(engine->root_obj)->spawnAsteroids = false;
 
-    }
+//    }
 }
 
 
