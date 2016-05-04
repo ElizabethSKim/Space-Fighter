@@ -31,6 +31,15 @@ void Ship::configure()
     auto sprite = engine->spawn<sf::Sprite>(":assets/ship");
     child_nodes.append(sprite);
     sprite->scale = QVector3D(1,1,1);
+    auto rsprite = object_cast<sf::Sprite>(sprite);
+    rsprite->hitpoly[0]  =  12; rsprite->hitpoly[1]  = -50; //tip
+    rsprite->hitpoly[2]  =  23; rsprite->hitpoly[3]  = -30; //tip
+    rsprite->hitpoly[4]  =  26; rsprite->hitpoly[5]  = 0;
+    rsprite->hitpoly[6]  =  31; rsprite->hitpoly[7]  = 50;
+    rsprite->hitpoly[8]  = -31; rsprite->hitpoly[9]  = 50;
+    rsprite->hitpoly[10] = -26; rsprite->hitpoly[11] = 0;
+    rsprite->hitpoly[12] = -23; rsprite->hitpoly[13] = -30; //tip
+    rsprite->hitpoly[14] = -12; rsprite->hitpoly[15] = -50; //tip
 
     //Engine flame
     flame = engine->spawn<sf::Sprite>(":assets/flame");

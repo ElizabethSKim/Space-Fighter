@@ -52,7 +52,6 @@ void UI::tick(float ticktime)
     SceneObject::tick(ticktime);
     auto sf = object_cast<sf::StarFighter>(engine->root_obj);
     auto h = object_cast<sf::Health>(sf->health);
-<<<<<<< Updated upstream
     if (h)
     {
         if ((h->healthPoints) <= 0)
@@ -61,14 +60,6 @@ void UI::tick(float ticktime)
             object_cast<sf::StarFighter>(engine->root_obj)->spawnAsteroids = false;
         }
     }
-=======
-  //  if ((h->healthPoints) <= 0)
-    //{
-//        gameover->invisible = false;
-//        object_cast<sf::StarFighter>(engine->root_obj)->spawnAsteroids = false;
-
-//    }
->>>>>>> Stashed changes
 }
 
 

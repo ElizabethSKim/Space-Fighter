@@ -31,7 +31,15 @@ void Asteroid::configure()
 {
 
     asteroid = engine->spawn<sf::Sprite>(":assets/asteroid/asteroid3");
-
+    auto rsprite = object_cast<sf::Sprite>(asteroid);
+    rsprite->hitpoly[0]  =  15; rsprite->hitpoly[1]  = -30;
+    rsprite->hitpoly[2]  =  35; rsprite->hitpoly[3]  = -15;
+    rsprite->hitpoly[4]  =  35; rsprite->hitpoly[5]  =  15;
+    rsprite->hitpoly[6]  =  15; rsprite->hitpoly[7]  =  35;
+    rsprite->hitpoly[8]  = -15; rsprite->hitpoly[9]  =  35;
+    rsprite->hitpoly[10] = -35; rsprite->hitpoly[11] =  15;
+    rsprite->hitpoly[12] = -35; rsprite->hitpoly[13] = -15;
+    rsprite->hitpoly[14] = -15; rsprite->hitpoly[15] = -30;
 
     explosion[0] = engine->spawn<sf::Sprite>(":assets/asteroid/explosion1");
     explosion[1] = engine->spawn<sf::Sprite>(":assets/asteroid/explosion2");

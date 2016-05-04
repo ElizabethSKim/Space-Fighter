@@ -53,7 +53,6 @@ void Score::tick(float ticktime)
     child_nodes.clear();
     int n = score;
     QVector<int> v = print_each_digit(n);
-    qDebug() << n << v;
     int loc = 0;
     for(int i=v.size()-1; i>=0; i--){
         auto thisdigit = engine->spawn<sf::Sprite>(numbers[v[i]]);
