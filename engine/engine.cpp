@@ -202,7 +202,7 @@ void Engine::render()
     checkCollisions(collidables);
 
     int w_width = width(); int w_height = height();
-#if 0
+
     GLuint framebuf, frametex;
     glGenFramebuffers(1, &framebuf);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuf);
@@ -289,7 +289,7 @@ void Engine::render()
     glDeleteFramebuffers(1, fbz);
 
     frames++;
-    while((err = glGetError()) != GL_NO_ERROR)
+    while((err = glGetError()) != GL_NO_ERROfR)
     {
         qDebug() << "GL ERROR postpostprocess: " << err;
     }

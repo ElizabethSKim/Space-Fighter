@@ -90,7 +90,7 @@ void Asteroid::configure()
         }
     });
 
-    connect(engine, &SceneObject::left_screen, this, [this]()
+    connect(SceneObject, &SceneObject::left_screen, this, [this]()
     {
         //child_nodes.removeLast();
 //        auto ptr = object_cast<sf::StarFighter>(engine->root_obj);
