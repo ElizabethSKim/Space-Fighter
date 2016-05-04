@@ -1,8 +1,8 @@
 #include "weapon.h"
 #include <components/sprite.h>
 #include <QElapsedTimer>
-
-
+#include <components/starfighter.h>
+#include <components/score.h>
 using sf::Weapon;
 
 
@@ -71,10 +71,22 @@ void Weapon::configure()
     {
         if (b && !isFiring)
         {
-            isFiring = true;
-            frameTime.start();
+            auto sf = object_cast<sf::StarFighter>(engine->root_obj);
+            auto score = object_cast<sf::Score>(sf->score);
+//            qDebug() << object_cast<sf::Score>(sf)->score;
+            if (score)
+            {
+              if (score->score >= 3)
+              {
+                  score->score -= 3;
+              }
+//                {
+//                    object_cast<sf::Score>(object_cast<sf::StarFighter>(engine->root_obj))->score -= 1;
+                    isFiring = true;
+                    frameTime.start();
+//                }
+            }
         }
-
     });
 }
 

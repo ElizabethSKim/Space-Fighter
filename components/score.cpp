@@ -6,7 +6,7 @@ using sf::Score;
 
 Score::Score()
 {
-    score = 0;
+    score = 1;
     spawnLoc = location;
 }
 
