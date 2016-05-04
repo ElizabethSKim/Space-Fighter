@@ -69,17 +69,30 @@ void StarFighter::tick(float ticktime)
 
     if (spawnAsteroids)
     {
-            if (qrand() % 180 == 0)
-            {
-                auto asteroid = engine->spawn<sf::Asteroid>();
-                child_nodes.append(asteroid);
-                int xAxis = qrand() % 1500;
-                //TODO Have 4 cases
-                //TODO if has entered is true and then isLeft -> remove asteroid
-                asteroid->location = QVector3D(xAxis, 0, 0);
-                asteroid->velocity = QVector3D(qrand() % 100, qrand() % 100 ,0);
-                renderedAsteroids += 1;
-            }
+        if (qrand() % 180 == 0)
+        {
+            auto asteroid = engine->spawn<sf::Asteroid>();
+            child_nodes.append(asteroid);
+            int xAxis = qrand() % 1500;
+            //TODO Have 4 cases
+            //TODO if has entered is true and then isLeft -> remove asteroid
+            asteroid->location = QVector3D(xAxis, 0, 0);
+            asteroid->velocity = QVector3D(qrand() % 100, qrand() % 100 ,0);
+            renderedAsteroids += 1;
+
+            auto asteroid1 = engine->spawn<sf::Asteroid>();
+            child_nodes.append(asteroid1);
+            asteroid1->location = QVector3D(xAxis, 1200, 0);
+            asteroid1->velocity = QVector3D(qrand() % 100,-qrand() % 100 ,0);
+            renderedAsteroids += 1;
+
+            auto asteroid2 = engine->spawn<sf::Asteroid>();
+            child_nodes.append(asteroid2);
+            int yAxis = qrand() % 100;
+            asteroid2->location = QVector3D(1500, yAxis,0);
+            asteroid2->velocity = QVector3D(-qrand() % 100,qrand() % 100 ,0);
+            renderedAsteroids += 1;
+        }
 
 
 //            if (engine->gametime.elapsed() % 128 == 0)

@@ -7,6 +7,10 @@ using sf::Ship;
 Ship::Ship()
 {
 }
+PreloadAsset Ship::preload([](Engine* engine){
+    engine->spawn<sf::Sprite>(":assets/ship");
+    engine->spawn<sf::Sprite>(":assets/flame");
+});
 
 void Ship::configure()
 {

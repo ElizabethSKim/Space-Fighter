@@ -202,7 +202,7 @@ void Engine::render()
     checkCollisions(collidables);
 
     int w_width = width(); int w_height = height();
-
+#if 0
     GLuint framebuf, frametex;
     glGenFramebuffers(1, &framebuf);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuf);
@@ -263,6 +263,7 @@ void Engine::render()
     {
         qFatal("aborting due to render error");
     }
+
     //TODO postprocess shader rendering
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -286,6 +287,7 @@ void Engine::render()
     glDeleteTextures(1, tex);
     GLuint fbz [] = {framebuf};
     glDeleteFramebuffers(1, fbz);
+
     frames++;
     while((err = glGetError()) != GL_NO_ERROR)
     {

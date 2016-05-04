@@ -65,13 +65,12 @@ void Score::tick(float ticktime)
         numbers[i]->invisible = true;
     }
 
-    int n = score+10;
+    int n = score;
     QVector<int> v = print_each_digit(n);
     int loc = 0;
     for(int i=v.size()-1; i>=0; i--){
         numbers[v[i]]->location = QVector3D(spawnLoc.x()+loc, spawnLoc.y(), spawnLoc.z());
         numbers[v[i]]->invisible = false;
         loc += 50;
-        qDebug() << v.size()-1;
     }
 }

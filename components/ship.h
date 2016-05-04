@@ -15,6 +15,7 @@ namespace sf
         void configure();
         void tick(float ticktime);
         void delay();
+        static PreloadAsset preload;
     private:
         QVector2D steeringVector;
         double throttle;

@@ -30,7 +30,7 @@ PreloadAsset Asteroid::preload([](Engine* engine){
 void Asteroid::configure()
 {
 
-    asteroid = engine->spawn<sf::Sprite>(":assets/asteroid/asteroid1");
+    asteroid = engine->spawn<sf::Sprite>(":assets/asteroid/asteroid3");
 
 
     explosion[0] = engine->spawn<sf::Sprite>(":assets/asteroid/explosion1");
@@ -83,28 +83,22 @@ void Asteroid::configure()
 
         if (dominant && other->is("sf::Asteroid"))
         {
-            /*
-            auto vel1dir = this->velocity;
-            vel1dir.normalize();
-            auto vel2dir = other->velocity;
-            vel2dir.normalize();
-            auto midaxis = (vel1dir + veld2dir)/2;
-            */
             auto v = me->velocity;
             me->velocity = other->velocity;
             other->velocity = v;
 
-           // me->velocity = -velocity;
-//            other->velocity = -velocity;
         }
     });
 
-     /*
     connect(engine, &SceneObject::left_screen, this, [this]()
     {
-        child_nodes.removeLast();
+        //child_nodes.removeLast();
+//        auto ptr = object_cast<sf::StarFighter>(engine->root_obj);
+//        ptr->remove_child_later(object_cast<sf::Asteroid>(this));
+//        object_cast<sf::StarFighter>(engine->root_obj)->renderedAsteroids -= 1;
+//        this.clear();
+
     });
-    */
 }
 
 
@@ -114,7 +108,6 @@ void Asteroid::tick(float ticktime)
 
     if (isHit)
     {
-        //TODO
         if (invincibleTime.elapsed() > 1000)
         {
             auto health = object_cast<sf::StarFighter>(engine->root_obj)->health;
