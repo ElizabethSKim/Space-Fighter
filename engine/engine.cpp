@@ -202,7 +202,6 @@ void Engine::render()
     checkCollisions(collidables);
 
     int w_width = width(); int w_height = height();
-#if 0
     GLuint framebuf, frametex;
     glGenFramebuffers(1, &framebuf);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuf);
