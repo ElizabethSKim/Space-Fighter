@@ -143,12 +143,37 @@ void Engine::checkCollisions(QList<object_ptr> &list)
     }
 }
 
+static const char *fshader =
+    "#version 120                                               \n"
+    "varying vec2 UV;                                           \n"
+    "uniform sampler2D tex;                                     \n"
+    "void main(){                                               \n"
+    "    gl_FragColor = texture2D( tex, UV);                    \n"
+    "}                                                          \n";
+
+static const char *vshader =
+    "#version 120                                               \n"
+    "attribute highp vec3 vertex_position;                      \n"
+    "varying highp vec2 UV;                                     \n"
+    "void to_uv(in vec3 pos, out vec2 uv)                       \n"
+    "{uv=(pos.xy + 1).xy/2;}                                    \n"
+    "void main() {                                              \n"
+    "   to_uv(vertex_position, UV);                             \n"
+    "   gl_Position.xyz = vertex_position;                      \n"
+    "   gl_Position.w = 1;                                      \n"
+    "}                                                          \n";
+
+static const float fullscreen_quad[] = {-1,-1,-1,1,1,1,1,-1};
 void Engine::render()
 {
     //Init OpenGL
     if (!m_device) {
         m_device = new QOpenGLPaintDevice;
         runLoadFunctions();
+        postprog = new QOpenGLShaderProgram(NULL);
+        postprog->addShaderFromSourceCode(QOpenGLShader::Vertex, vshader);
+        postprog->addShaderFromSourceCode(QOpenGLShader::Fragment, fshader);
+        postprog->link();
     }
 
     //Work out our tick time
@@ -173,16 +198,39 @@ void Engine::render()
     collateCollidables(root_obj, collidables);
     checkCollisions(collidables);
 
+    int w_width = width(); int w_height = height();
+
+    GLuint framebuf, frametex;
+    glGenFramebuffers(1, &framebuf);
+    glGenTextures(1, &frametex);
+    glBindTexture(GL_TEXTURE_2D, frametex);
+    //I think the filters only apply when we sample from it later...
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //This is important..
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //Wonder what color depth we need?
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w_width, w_height, 0,GL_RGBA, GL_RGBA8, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frametex, 0);
+
+    GLenum db[1] = {GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, db);
+
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        qFatal("could not do render-to-FBO");
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuf);
+
     //Then we render the first pass,
-    glViewport(0, 0, width(), height());
+    glViewport(0, 0, w_width, w_height);
 
     //first clear our framebuffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    //glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //Change the GL context to match our window
-    m_device->setSize(size());
+    m_device->setSize(QSize(w_width, w_height));
 
     //Set up an orthographic projection matrix
     stack.push(stack.top());
@@ -190,7 +238,24 @@ void Engine::render()
     root_obj->render(ticktime);
 
     //TODO postprocess shader rendering
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(0,0,w_width, w_height);
 
+    int postprog_vp = postprog->attributeLocation("vertex_position");
+    postprog->bind();
+    glBindTexture(GL_TEXTURE0, frametex);
+    postprog->setUniformValue("tex", 0);
+    glVertexAttribPointer(postprog_vp, 2, GL_FLOAT, GL_FALSE,0,fullscreen_quad);
+    glEnableVertexAttribArray(postprog_vp);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableVertexAttribArray(postprog_vp);
+    postprog->release();
+
+    GLuint tex [] = {frametex};
+    glDeleteTextures(1, tex);
+    GLuint fbz [] = {framebuf};
+    glDeleteFramebuffers(1, fbz);
     frames++;
 }
 

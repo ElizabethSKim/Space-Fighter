@@ -7,7 +7,7 @@
 #include <QtGui/QScreen>
 #include <QtCore/qmath.h>
 #include <QtGui/QWindow>
-#include <QtGui/QOpenGLFunctions>
+#include <QtGui/QOpenGLFunctions_3_0>
 #include <QElapsedTimer>
 #include <QTimer>
 #include <QGamepad>
@@ -22,7 +22,7 @@ class QOpenGLPaintDevice;
 #define SCENE_NEAR -100
 #define SCENE_FAR 100
 
-class Engine : public QWindow, protected QOpenGLFunctions
+class Engine : public QWindow, protected QOpenGLFunctions_3_0
 {
     Q_OBJECT
 public:
@@ -85,10 +85,13 @@ private:
 
     bool m_update_pending;
     bool m_animating;
+    GLuint m_framebuf;
+    GLuint m_framebuf_texture;
+
+    QOpenGLShaderProgram *postprog;
     QOpenGLContext *m_context;
     QOpenGLPaintDevice *m_device;
     qint64 last_tick;
-
 
     QTimer fpstimer;
     int frames;
