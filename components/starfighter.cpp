@@ -55,6 +55,7 @@ void StarFighter::spawnPickup(QVector3D loc)
     auto star = engine->spawn<sf::Pickup>();
     child_nodes.append(star);
     star->location = loc;
+    star->scale = QVector3D(0.5,0.5,0);
 }
 
 void StarFighter::tick(float ticktime)

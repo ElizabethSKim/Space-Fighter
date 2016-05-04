@@ -85,7 +85,7 @@ void Sprite::configure(QString asset)
         texture->setMagnificationFilter(QOpenGLTexture::Linear);
         loaded[asset] = texture;
     }
-    //Calculate this correctly some time
+    //TODO Calculate this correctly some time
     hitpoly[0]  = 30; hitpoly[1]   = -50;
     hitpoly[2]  = 50; hitpoly[3]   = -30;
     hitpoly[4]  = 50; hitpoly[5]   = 30;
@@ -222,7 +222,6 @@ void Sprite::render(float ticktime)
     glDisableVertexAttribArray(shader_vertex_position);
     glDisableVertexAttribArray(shader_vertex_uv_coordinate);
     shader_program->release();
-
 
     popmatrix();
 

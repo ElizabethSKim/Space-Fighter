@@ -71,9 +71,9 @@ void SceneObject::tick(float ticktime)
     matrix = getmatrix();
 
     //Also tick sub nodes
-    for (auto p = child_nodes.begin(); p != child_nodes.end(); p++) {
-        if (!(*p).isNull())
-            (*p)->tick(ticktime);
+    foreach(auto p, child_nodes)
+    {
+        p->tick(ticktime);
     }
 
     //And delete all that asked to be deleted

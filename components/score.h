@@ -12,7 +12,7 @@ namespace sf
             Score();
             void configure();
             void tick(float ticktime);
-            object_ptr numbers[10];
+            QString numbers[10];
             int score;
             QVector<int> print_each_digit(int i);
             QVector3D spawnLoc;
