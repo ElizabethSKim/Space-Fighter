@@ -59,7 +59,7 @@ void UI::tick(float ticktime)
             gameover->invisible = false;
             object_cast<sf::StarFighter>(engine->root_obj)->spawnAsteroids = false;
             object_cast<sf::StarFighter>(engine->root_obj)->ship->invisible = true;
-            object_cast<sf::StarFighter>(engine->root_obj)->score->location = QVector3D(1200, 500,0);
+            object_cast<sf::StarFighter>(engine->root_obj)->score->location = QVector3D(1200, 600,0);
             object_cast<sf::StarFighter>(engine->root_obj)->score->scale = QVector3D(2,2,1);
         }
     }
