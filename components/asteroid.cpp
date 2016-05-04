@@ -115,17 +115,15 @@ void Asteroid::tick(float ticktime)
     if (isHit)
     {
         //TODO
-        if (invincibleTime.elapsed() == 3000)
+        if (invincibleTime.elapsed() > 1000)
         {
             auto health = object_cast<sf::StarFighter>(engine->root_obj)->health;
             if (object_cast<sf::Health>(health)->healthPoints > 0)
             {
                 object_cast<sf::Health>(health)->healthPoints -= 1;
                 object_cast<sf::Health>(health)->setHearts();
+                isHit = false;
             }
-        } else
-        {
-            isHit = false;
         }
     }
 

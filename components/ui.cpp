@@ -1,5 +1,8 @@
 #include "ui.h"
 #include <components/sprite.h>
+#include <components/starfighter.h>
+#include <components/health.h>
+
 using sf::UI;
 
 UI::UI()
@@ -9,6 +12,7 @@ UI::UI()
 
 void UI::configure()
 {
+
     //TODO preload stuff
     start = engine->spawn<sf::Sprite>(":assets/ui/start");
     start->invisible = false;
@@ -46,6 +50,12 @@ void UI::configure()
 void UI::tick(float ticktime)
 {
     SceneObject::tick(ticktime);
+    if ((object_cast<sf::Health>(object_cast<sf::StarFighter>(engine->root_obj)->health)->healthPoints) <= 0)
+    {
+//        gameover->invisible = false;
+//        object_cast<sf::StarFighter>(engine->root_obj)->spawnAsteroids = false;
+
+    }
 }
 
 

@@ -16,8 +16,7 @@ int main(int argc, char *argv[])
 
     Engine engine;
     engine.resize(SCENE_WIDTH,SCENE_HEIGHT);
-    auto gamelogic = engine.spawn<sf::StarFighter>();
-    engine.root_obj = gamelogic;
+
     //object_cast<sf::StarFighter>(gamelogic)->test();
     engine.show();
 

@@ -14,11 +14,13 @@ SOURCES += engine/main.cpp \
     components/weapon.cpp \
     components/ui.cpp \
     components/preloadasset.cpp \
-    components/pickup.cpp
+    components/pickup.cpp \
+    components/score.cpp
 
 INCLUDEPATH += engine
 
-RESOURCES += assets.qrc
+RESOURCES += \
+    assets.qrc
 
 HEADERS += \
     engine/sceneobject.h \
@@ -32,6 +34,10 @@ HEADERS += \
     components/weapon.h \
     components/ui.h \
     components/preloadasset.h \
-    components/pickup.h
+    components/pickup.h \
+    components/score.h
 
-DISTFILES +=
+DISTFILES += \
+    assets/ship.png \
+    assets/kitten.png \
+    assets/flame.png

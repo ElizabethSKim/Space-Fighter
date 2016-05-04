@@ -18,6 +18,7 @@ namespace sf
         void setHearts();
         object_ptr heart;
     private:
+        static PreloadAsset preload;
 
     };
 }

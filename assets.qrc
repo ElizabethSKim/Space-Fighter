@@ -26,5 +26,15 @@
         <file alias="ui/howtoplay">assets/ui/howtoplay.png</file>
         <file alias="ui/start">assets/ui/start.png</file>
         <file alias="ui/heart">assets/ui/heart.png</file>
+        <file alias="numbers/9">assets/numbers/9.png</file>
+        <file alias="numbers/8">assets/numbers/8.png</file>
+        <file alias="numbers/7">assets/numbers/7.png</file>
+        <file alias="numbers/6">assets/numbers/6.png</file>
+        <file alias="numbers/5">assets/numbers/5.png</file>
+        <file alias="numbers/4">assets/numbers/4.png</file>
+        <file alias="numbers/3">assets/numbers/3.png</file>
+        <file alias="numbers/2">assets/numbers/2.png</file>
+        <file alias="numbers/1">assets/numbers/1.png</file>
+        <file alias="numbers/0">assets/numbers/0.png</file>
     </qresource>
 </RCC>

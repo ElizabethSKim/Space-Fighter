@@ -1,6 +1,7 @@
 #include "pickup.h"
 #include <components/sprite.h>
 #include <components/starfighter.h>
+#include <components/score.h>
 #include "sceneobject.h"
 using sf::Pickup;
 
@@ -27,8 +28,8 @@ void Pickup::configure()
         if (other->is("sf::Ship"))
         {
             //TODO remove this/me whatevs
-            object_cast<sf::StarFighter>(engine->root_obj)->score += 1;
-            qDebug() <<  object_cast<sf::StarFighter>(engine->root_obj)->score;
+//            auto ptr_score  = object_cast<sf::StarFighter>(engine->root_obj)->score;
+            object_cast<sf::Score>(object_cast<sf::StarFighter>(engine->root_obj)->score)->score += 1;
             auto ptr = object_cast<sf::StarFighter>(engine->root_obj);
             ptr->remove_child_later(me);
             me.clear();

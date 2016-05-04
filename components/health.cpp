@@ -8,6 +8,11 @@ Health::Health()
     healthPoints = 3;
 }
 
+PreloadAsset Health::preload([](Engine* engine){
+    engine->spawn<sf::Sprite>(":assets/ui/heart");
+
+});
+
 void Health::configure()
 {
 

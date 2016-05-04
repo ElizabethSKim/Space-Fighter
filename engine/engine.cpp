@@ -8,6 +8,7 @@
 #include <QtGamepad/QGamepad>
 
 #include <components/sprite.h>
+#include <components/starfighter.h>
 
 Engine::Engine(QWindow *parent)
     : QWindow(parent)
@@ -241,6 +242,8 @@ void Engine::renderNow()
 
     if (needsInitialize) {
         initializeOpenGLFunctions();
+        auto gamelogic = spawn<sf::StarFighter>();
+        root_obj = gamelogic;
     }
 
     render();

@@ -6,7 +6,7 @@
 #include <components/weapon.h>
 #include <components/ui.h>
 #include <components/pickup.h>
-
+#include <components/score.h>
 using namespace sf;
 
 //FIXME Pressing start spawns 2 ships :O
@@ -22,7 +22,7 @@ void StarFighter::initialize()
     spawnAsteroids = false;
     renderedAsteroids = 0;
     maxAsteroids = 10;
-    score = 0;
+
 
     connect(engine, &Engine::startPressed, this, [this](bool b)
     {
@@ -39,6 +39,10 @@ void StarFighter::initialize()
             health = engine->spawn<sf::Health>();
             child_nodes.append(health);
             health->location = QVector3D(50, 50, 0);
+
+            score = engine->spawn<sf::Score>();
+            child_nodes.append(score);
+            score->location = QVector3D(1700, 100, 0);
 
             spawnAsteroids = true;
         }

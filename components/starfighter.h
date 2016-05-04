@@ -18,11 +18,10 @@ namespace sf
         object_ptr weapon;
         object_ptr ship;
         object_ptr health;
+        object_ptr score;
         bool spawnAsteroids;
         int maxAsteroids;
         int renderedAsteroids;
-        int score;
-
         void spawnPickup(QVector3D loc);
     };
 }
