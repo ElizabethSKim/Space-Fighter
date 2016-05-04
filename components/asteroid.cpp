@@ -74,6 +74,18 @@ void Asteroid::configure()
             {
                 isHit = true;
                 invincibleTime.start();
+                if (object_cast<sf::Health>(health)->healthPoints > 0)
+                {
+                    object_cast<sf::Health>(health)->healthPoints -= 1;
+                    object_cast<sf::Health>(health)->setHearts();
+                }
+            }
+            if (!isExploding)
+            {
+                asteroid->invisible = true;
+                isExploding = true;
+                explosionTime.start();
+                deleteMe = me;
             }
         }
 
@@ -114,19 +126,14 @@ void Asteroid::tick(float ticktime)
 {
     SceneObject::tick(ticktime);
 
-    if (isHit)
+  /*  if (isHit)
     {
         if (invincibleTime.elapsed() > 1000)
         {
-            auto health = object_cast<sf::StarFighter>(engine->root_obj)->health;
-            if (object_cast<sf::Health>(health)->healthPoints > 0)
-            {
-                object_cast<sf::Health>(health)->healthPoints -= 1;
-                object_cast<sf::Health>(health)->setHearts();
-                isHit = false;
-            }
+            isHit = false;
+
         }
-    }
+    }*/
 
     if (isExploding)
     {

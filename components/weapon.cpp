@@ -21,6 +21,19 @@ PreloadAsset Weapon::preload([](Engine* engine){
     engine->spawn<sf::Sprite>(":assets/lazer/lazer6");
 });
 
+void setHitPoly(object_ptr o)
+{
+    auto spr = object_cast<sf::Sprite>(o);
+    spr->hitpoly[0]  =  30; spr->hitpoly[1]  = -20;
+    spr->hitpoly[2]  =  50; spr->hitpoly[3]  = -10;
+    spr->hitpoly[4]  =  50; spr->hitpoly[5]  =  10;
+    spr->hitpoly[6]  =  30; spr->hitpoly[7]  =  20;
+    spr->hitpoly[8]  = -30; spr->hitpoly[9]  =  20;
+    spr->hitpoly[10] = -50; spr->hitpoly[11] =  10;
+    spr->hitpoly[12] = -50; spr->hitpoly[13] = -10;
+    spr->hitpoly[14] = -30; spr->hitpoly[15] = -20;
+}
+
 void Weapon::configure()
 {
 
@@ -51,6 +64,7 @@ void Weapon::configure()
     for (int i = 0; i < 6; i++)
     {
         lazer[i]->invisible = true;
+        setHitPoly(lazer[i]);
         child_nodes.append(lazer[i]);
     }
     connect(engine, &Engine::butA, this, [this](bool b)
