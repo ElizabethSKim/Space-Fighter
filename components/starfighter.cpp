@@ -59,7 +59,6 @@ void StarFighter::spawnPickup(QVector3D loc)
 
 void StarFighter::tick(float ticktime)
 {
-
     SceneObject::tick(ticktime);
 
     if (weapon)

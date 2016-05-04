@@ -194,6 +194,8 @@ void Engine::render()
     root_obj->tick(ticktime);
     stack.pop();
 
+
+
     //Now we check for collision
     QList<object_ptr> collidables;
     collateCollidables(root_obj, collidables);
@@ -203,16 +205,21 @@ void Engine::render()
 
     GLuint framebuf, frametex;
     glGenFramebuffers(1, &framebuf);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuf);
     glGenTextures(1, &frametex);
     glBindTexture(GL_TEXTURE_2D, frametex);
+
     //I think the filters only apply when we sample from it later...
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     //This is important..
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     //Wonder what color depth we need?
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w_width, w_height, 0,GL_RGBA, GL_RGBA8, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w_width, w_height, 0,GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, 0);
+
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frametex, 0);
 
     GLenum db[1] = {GL_COLOR_ATTACHMENT0};
@@ -221,7 +228,7 @@ void Engine::render()
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         qFatal("could not do render-to-FBO");
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuf);
+
 
     //Then we render the first pass,
     glViewport(0, 0, w_width, w_height);
@@ -235,17 +242,39 @@ void Engine::render()
 
     //Set up an orthographic projection matrix
     stack.push(stack.top());
+    GLenum err;
+    bool bail = false;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        qDebug() << "GL ERROR prerender: " << err;
+    }
+    if (bail)
+    {
+        qFatal("aborting due to render error");
+    }
     //Then descend into the tree
     root_obj->render(ticktime);
 
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        qDebug() << "GL ERROR postrender: " << err;
+    }
+    if (bail)
+    {
+        qFatal("aborting due to render error");
+    }
     //TODO postprocess shader rendering
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT);
     glViewport(0,0,w_width, w_height);
-
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        qDebug() << "GL ERROR locB: " << err;
+    }
     int postprog_vp = postprog->attributeLocation("vertex_position");
     postprog->bind();
-    glBindTexture(GL_TEXTURE0, frametex);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, frametex);
     postprog->setUniformValue("tex", 0);
     glVertexAttribPointer(postprog_vp, 2, GL_FLOAT, GL_FALSE,0,fullscreen_quad);
     glEnableVertexAttribArray(postprog_vp);
@@ -258,6 +287,14 @@ void Engine::render()
     GLuint fbz [] = {framebuf};
     glDeleteFramebuffers(1, fbz);
     frames++;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        qDebug() << "GL ERROR postpostprocess: " << err;
+    }
+    if (bail)
+    {
+        qFatal("aborting due to render error");
+    }
 }
 
 void Engine::renderLater()

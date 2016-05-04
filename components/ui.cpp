@@ -50,7 +50,9 @@ void UI::configure()
 void UI::tick(float ticktime)
 {
     SceneObject::tick(ticktime);
-    if ((object_cast<sf::Health>(object_cast<sf::StarFighter>(engine->root_obj)->health)->healthPoints) <= 0)
+    auto sf = object_cast<sf::StarFighter>(engine->root_obj);
+    auto h = object_cast<sf::Health>(sf->health);
+  //  if ((h->healthPoints) <= 0)
     {
 //        gameover->invisible = false;
 //        object_cast<sf::StarFighter>(engine->root_obj)->spawnAsteroids = false;
